@@ -1640,7 +1640,11 @@ window.__bbPre=(function(){
   // letter's song is 1.4 MB and has the longest runway, so it comes last.
   var ORDER=['sfx-knock.mp3','sfx-switch.mp3','sfx-engine.mp3','sfx-conch.mp3',
              'music-hall.mp3','music-sangeet.mp3','music-haldi.mp3',
-             'music-wedding.mp3','music-vidaayi.mp3','music-story.mp3'];
+             'music-wedding.mp3','music-vidaayi.mp3','music-story.mp3',
+             'bb-study.webp'];
+  // the letter's 29 photographs, last of all. They used to begin downloading
+  // at the moment the study door was tapped, which is why they arrived blank.
+  for(var i=1;i<=29;i++) ORDER.push('os'+(i<10?'0':'')+i+'.webp');
   function url(n){ return READY[n]||null; }
   function onReady(n,fn){
     if(READY[n]){ fn(READY[n]); return; }
@@ -1994,7 +1998,11 @@ else if(p.has('t')){
     songPrime();                    // start fetching the song now, not at the letter
     // one pass, first open only: hand every data-src its real src
     st.querySelectorAll('#study [data-src],#story [data-src]').forEach(function(im){
-      im.src=im.getAttribute('data-src'); im.removeAttribute('data-src');
+      var d=im.getAttribute('data-src');
+      // take the copy the runner already holds, if it arrived
+      im.src=(window.__bbPre && window.__bbPre.url(d.split('/').pop())) || d;
+      im.removeAttribute('data-src');
+      im.decoding='sync';
     });
   }
   // --- the letter's own song. One <audio> through its own GainNode on the same
@@ -2175,7 +2183,7 @@ else if(p.has('t')){
     {sel:'.wd-scene',  src:'assets/landing/music-wedding.mp3', vol:0.78, wait:0},
     {sel:'.vd-scene',  sel2:'.vd-pata', src:'assets/landing/music-vidaayi.mp3', vol:0.85, wait:0}
   ];
-  var FADE_IN=1.2, FADE_OUT=1.5, REST=5000, DWELL=400;
+  var FADE_IN=0.7, FADE_OUT=1.5, REST=5000, DWELL=200;
 
   function ramp(t,to,dur){
     if(!t.g||!window.__bbAC) { if(t.el) try{t.el.volume=to;}catch(e){} return; }
@@ -2187,6 +2195,12 @@ else if(p.has('t')){
     if(t.el) return;
     var f=t.src.split('/').pop(), u=window.__bbPre.url(f);
     t.el=new Audio(u||t.src);
+    // A track may only be heard if the journey asked for it. unlock1 plays
+    // every element muted to get iOS to admit it, and on iOS that pause can
+    // lose the race - this pauses it again the instant it starts.
+    t.el.addEventListener('playing',function(){
+      if(!t.want){ try{ t.el.pause(); t.el.currentTime=0; }catch(e){} }
+    });
     // Only download through the element if we already hold the sound. If we
     // do not, stay quiet and let the runner bring it - two downloads of the
     // same file racing each other is how the connection gets crowded.
@@ -2225,6 +2239,7 @@ else if(p.has('t')){
   }
   function apply(t){
     var want = (typeof sndOn==='undefined'||sndOn) && t.vis && !t.resting;
+    t.want = want;                             // the guard above reads this
     if(want){
       wire(t); graph(t);
       if(!t.since) t.since=performance.now();   // when this scene began waiting
