@@ -1487,6 +1487,48 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 </div>
 
 <script>
+// --- The audio runner -------------------------------------------------
+// Every sound is collected up front and held in memory, so that when a cue
+// fires there is no network involved at all.
+//
+// Why not preload="auto": a detached media element does not reliably preload
+// in Chromium (measured - see songPrime), and iOS quietly downgrades preload
+// to metadata-only on a cellular connection.
+// Why not a plain fetch into the browser cache: media is requested in byte
+// ranges, and a cached whole-file response does not always satisfy a range
+// request. Holding the bytes ourselves removes the question entirely.
+window.__bbPre=(function(){
+  var READY={}, WAITERS={}, started=false;
+  // Needed-soonest first. The four knock sounds are 96 KB between them; the
+  // letter's song is 1.4 MB and has the longest runway, so it comes last.
+  var ORDER=['sfx-knock.mp3','sfx-switch.mp3','sfx-engine.mp3','sfx-conch.mp3',
+             'music-hall.mp3','music-sangeet.mp3','music-haldi.mp3',
+             'music-wedding.mp3','music-vidaayi.mp3','music-story.mp3'];
+  function url(n){ return READY[n]||null; }
+  function onReady(n,fn){
+    if(READY[n]){ fn(READY[n]); return; }
+    (WAITERS[n]=WAITERS[n]||[]).push(fn);
+  }
+  function done(n,u){
+    READY[n]=u; var w=WAITERS[n]; WAITERS[n]=null;
+    if(w) w.forEach(function(f){ try{ f(u); }catch(e){} });
+  }
+  // One at a time. Ten at once on a weak connection means all ten are late.
+  function next(i){
+    if(i>=ORDER.length) return;
+    var n=ORDER[i];
+    fetch('assets/landing/'+n).then(function(r){ return r.ok? r.blob():null; })
+      .then(function(b){ if(b) done(n,URL.createObjectURL(b)); })
+      .catch(function(){})                 // a failure is not fatal: the
+      .then(function(){ next(i+1); });     // element falls back to the URL
+  }
+  function start(){ if(started) return; started=true; next(0); }
+  // Only once the house is drawn, so artwork never competes with audio.
+  if(document.readyState==='complete') setTimeout(start,0);
+  else window.addEventListener('load',function(){ setTimeout(start,0); });
+  return {url:url, onReady:onReady, order:ORDER, ready:READY};
+})();
+
 var st=document.getElementById('stage');
 var T=new Date('2027-01-26T18:30:00+05:30').getTime();
 function tick(){
@@ -1674,9 +1716,38 @@ else if(p.has('t')){
          if(C){ window.__bbAC=new C(); if(window.__bbAC.state==='suspended') window.__bbAC.resume(); } }
     catch(e){ window.__bbAC=null; }
   }
+  // iOS admits audio one element at a time, and only during a real tap.
+  // Playing and instantly pausing an element inside the knock is what admits
+  // it. Volume is forced to zero for that instant and restored immediately -
+  // forget the restore and the whole page is silent, which is the classic way
+  // this particular fix goes wrong.
+  function unlock1(a){
+    if(!a) return;
+    try{
+      var v=a.volume, m=a.muted;
+      a.muted=true; a.volume=0;
+      var fin=function(){ try{ a.pause(); a.currentTime=0;
+                               a.volume=v||1; a.muted=m; a.__ok=true; }catch(e){} };
+      var p=a.play(); if(p&&p.then) p.then(fin,fin); else fin();
+    }catch(e){}
+  }
+  window.__bbUnlock1=unlock1;
+  function unlockAll(){
+    for(var k in SFX) unlock1(SFX[k]);
+    if(window.__bbMusicUnlock) window.__bbMusicUnlock();
+  }
+
   ['knock','switch','engine','conch'].forEach(function(n){
-    var a=new Audio('assets/landing/sfx-'+n+'.mp3');   // mp3: servable and playable everywhere
+    var f='sfx-'+n+'.mp3';
+    var a=new Audio(window.__bbPre.url(f)||('assets/landing/'+f));
     a.preload='auto'; a.load(); SFX[n]=a;
+    // If the in-memory copy lands later, take it - but never swap the source
+    // under a sound that has already started.
+    window.__bbPre.onReady(f,function(u){
+      if(a.src===u||!a.paused||a.currentTime>0) return;
+      a.src=u; a.load();
+      if(a.__ok) unlock1(a);          // a new source needs admitting again
+    });
   });
   function play(n){
     if(!sndOn) return;                       // checked at FIRE time, not schedule time
@@ -1709,6 +1780,7 @@ else if(p.has('t')){
     if(st.classList.contains('knocked')||st.classList.contains('inside')) return;
     st.classList.add('knocked');
     primeAudio();
+    unlockAll();         // admit every sound while we still have the tap
     cue( 140,'knock');   // four raps, matched to the ring
     cue(1300,'switch');  // the street lamp catches, then flickers
     cue(5000,'engine');  // the driver turns the key
@@ -1781,8 +1853,12 @@ else if(p.has('t')){
   // looking at the desk.
   function songPrime(){
     if(songEl) return;
-    songEl=new Audio('assets/landing/music-story.mp3');   // 3:04, 64 kbps mono
+    songEl=new Audio(window.__bbPre.url('music-story.mp3')||'assets/landing/music-story.mp3');
     songEl.loop=true; songEl.preload='auto';
+    window.__bbPre.onReady('music-story.mp3',function(u){
+      if(songEl.src===u||!songEl.paused||songEl.currentTime>0) return;
+      songEl.src=u; songEl.load();
+    });
     songEl.addEventListener('playing',songUp);
     // It has to be IN the document. Chromium does not reliably preload a media
     // element that was never attached, which is why the head start this whole
@@ -1896,6 +1972,7 @@ else if(p.has('t')){
     // The tap still primes audio so the journey works if they scroll back up.
     var doSkip=function(){
       primeAudio();                       // unlocks audio for later; plays nothing now
+      unlockAll();                        // the skip is a real tap too
       window.__bbHush=performance.now()+1600;   // stay silent while the jump settles
       enter(); st.classList.add('opened');
       var r=document.querySelector('.rsvp'); if(!r) return;
@@ -1943,7 +2020,28 @@ else if(p.has('t')){
   }
   function wire(t){
     if(t.el) return;
-    t.el=new Audio(t.src); t.el.preload='auto'; t.el.load();
+    var f=t.src.split('/').pop(), u=window.__bbPre.url(f);
+    t.el=new Audio(u||t.src);
+    // Only download through the element if we already hold the sound. If we
+    // do not, stay quiet and let the runner bring it - two downloads of the
+    // same file racing each other is how the connection gets crowded.
+    t.el.preload = u? 'auto':'none';
+    if(u) t.el.load();
+    window.__bbPre.onReady(f,function(nu){
+      if(!t.el||t.el.src===nu||!t.el.paused||t.el.currentTime>0) return;
+      t.el.src=nu; t.el.preload='auto'; t.el.load();
+      if(t.el.__ok&&window.__bbUnlock1) window.__bbUnlock1(t.el);
+    });
+    // A track that arrives after its scene has already begun joins at the
+    // point it would have reached, instead of starting from the top.
+    t.el.addEventListener('canplay',function(){
+      if(!t.vis||t.resting||!t.el.paused) return;
+      var late=t.since? (performance.now()-t.since)/1000 : 0;
+      if(late>0.4 && t.el.duration && late<t.el.duration){
+        try{ t.el.currentTime=late; }catch(e){}
+      }
+      apply(t);
+    });
     t.el.addEventListener('ended',function(){
       t.resting=true; ramp(t,0,0.1);
       setTimeout(function(){ t.resting=false; t.fading=false; apply(t); }, REST);
@@ -1964,9 +2062,11 @@ else if(p.has('t')){
     var want = (typeof sndOn==='undefined'||sndOn) && t.vis && !t.resting;
     if(want){
       wire(t); graph(t);
+      if(!t.since) t.since=performance.now();   // when this scene began waiting
       if(t.el.paused){ t.fading=false; var p=t.el.play(); if(p&&p.catch) p.catch(function(){}); }
       ramp(t,t.vol,FADE_IN);
     }else if(t.el){
+      t.since=0;
       ramp(t,0,FADE_OUT);
       clearTimeout(t.stopT);
       t.stopT=setTimeout(function(){ if(!t.vis&&t.el&&!t.el.paused) t.el.pause(); }, FADE_OUT*1000+80);
@@ -2030,6 +2130,11 @@ else if(p.has('t')){
     },250);
   }
   window.__bbMusicMute=function(){ TRACKS.forEach(function(t){ if(t.el) apply(t); }); };
+  // Called from the knock and the skip, so every track exists and can be
+  // admitted while the tap is still live.
+  window.__bbMusicUnlock=function(){
+    TRACKS.forEach(function(t){ wire(t); if(window.__bbUnlock1) window.__bbUnlock1(t.el); });
+  };
   // the study asks for silence through the same recompute that owns every
   // other decision about which track is playing, so the two cannot disagree
   window.__bbQuietSet=function(q){ window.__bbQuiet=!!q; queue(); };
