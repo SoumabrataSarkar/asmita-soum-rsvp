@@ -1006,6 +1006,13 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 /* ===== the sign-in gate on the RSVP ===== */
 .gate{text-align:left}
 .gtext{font:400 11.5px/1.7 Philosopher,serif;color:#4A2A18;margin:0 0 16px}
+/* The way out when Google's sign-in cannot run - an in-app browser, a
+   blocked script, no Google account. Quiet, but never hidden. */
+.gskip{display:inline-block;margin:14px 0 0;padding:0;background:none;border:none;
+  font:400 10px/1.5 Philosopher,serif;color:#8E1B14;cursor:pointer;
+  border-bottom:1px solid rgba(142,27,20,.45);-webkit-tap-highlight-color:transparent}
+.gskip:hover{color:#6E1414}
+.gskip:focus-visible{outline:2px solid #8E1B14;outline-offset:3px}
 .gbtn{display:flex;justify-content:center;min-height:46px;margin-bottom:14px}
 .gwho{display:flex;align-items:center;justify-content:space-between;gap:10px;
   background:#FBF5E8;border:1px solid #C79A6A;border-radius:2px;padding:9px 11px;
@@ -1272,7 +1279,9 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
              before you answer. We only ever see your name and your email address &mdash;
              nothing else, and nothing from your account.</p>
           <div class="gbtn" id="gbtn"></div>
-          <p class="fnote">No Google account? Call us instead &mdash; the numbers are just below.</p>
+          <button type="button" class="gskip" data-gskip>Trouble signing in? Fill in the form without it</button>
+          <p class="fnote">No Google account, or the button will not open? Use the line above &mdash;
+            your answer still reaches us. You can also just call: the numbers are below.</p>
         </div>
         <div class="gwho" data-who>
           <span class="d"><b data-wname>&nbsp;</b><s data-wmail>&nbsp;</s></span>
@@ -1740,6 +1749,9 @@ var GCRED=null;
     if(!sec.classList.contains('signed') &&
        !(window.google&&google.accounts&&google.accounts.id)) ungate();
   },4000);
+
+  var sk=sec.querySelector('[data-gskip]');
+  if(sk) sk.addEventListener('click',function(){ ungate(); });
 
   var so=sec.querySelector('[data-signout]');
   if(so) so.addEventListener('click',function(){
