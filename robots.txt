@@ -1,0 +1,4 @@
+# This is a private wedding invitation. It is meant for the people it was
+# sent to, not for search. Please do not index it.
+User-agent: *
+Disallow: /
