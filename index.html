@@ -397,16 +397,9 @@ html,body{margin:0;background:#241110;font-family:Philosopher,serif}
 @keyframes vdRice{0%{opacity:0;transform:translateY(0) rotate(0)}
   10%{opacity:.95}75%{opacity:.8}100%{opacity:0;transform:translateY(210px) rotate(180deg)} }
 
-.vd-pata{position:relative;background:#F2E8D5;padding:64px 36px 60px;color:#3A170F;text-align:center}
-.vd-pata i.seam{position:absolute;left:0;right:0;top:-46px;height:46px;pointer-events:none;
-  background:linear-gradient(rgba(242,232,213,0),#F2E8D5)}
-.vd-pata::before{content:"";position:absolute;inset:32px;border:1px solid #C79A6A;pointer-events:none}
-.vd-pata::after{content:"";position:absolute;inset:36px;border:1px solid rgba(142,91,51,.35);pointer-events:none}
-.vd-pata h3{font:400 24px/1.15 Agraham,'Cormorant Garamond',serif;margin:8px 0 15px;color:#6E1414}
-.vd-pata .t{font:700 12px/1.6 Philosopher,serif;letter-spacing:.06em}
-.vd-pata .v{font:400 10.5px/1.6 Philosopher,serif;color:#6B4A32;margin-top:9px}
-.vd-pata a{font:400 9px/1 Philosopher,serif;letter-spacing:.2em;color:#8E1B14;
-  text-decoration:none}
+/* Above the farewell group: the people and taxi stay unobstructed. */
+.vd-scene .evcard{top:auto;bottom:31%;z-index:3;animation:none}
+.vd-scene .evcard h3{font-size:24px;margin-bottom:16px}
 
 @supports (animation-timeline: view()){
   .vd-dawn{animation-name:vdWarm;animation-duration:auto;animation-timing-function:ease-out;
@@ -567,9 +560,10 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 .faq .q .a .ev b{display:block;font:600 13px/1.3 'Cormorant Garamond',serif;color:#6E1414;margin-bottom:1px}
 
 .cts{background:#F2E8D5;padding:52px 26px 62px;color:#3A170F;text-align:center}
-.ct{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;
+.ct{display:grid;grid-template-columns:minmax(0,1fr) 140px;align-items:center;gap:8px;text-align:left;
   background:#F7EEDC;border:1px solid #C79A6A;padding:12px 14px;margin-top:8px}
-.ct span.d{flex:1}
+.ct span.d{min-width:0}
+.ct a{text-align:center;width:100%}
 .ct b{display:block;font:600 14px/1.2 'Cormorant Garamond',serif;color:#3A170F}
 .ct s{display:block;text-decoration:none;font:400 8px/1 Philosopher,serif;letter-spacing:.26em;
   color:#9A4A22;margin-top:4px}
@@ -1061,10 +1055,9 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
   .evcard .v{font-size:9px;margin-top:6px}
   .evcard .mrule{margin:9px auto 8px}
   .evcard .x{font-size:7.5px;margin-top:7px}
-  .vd-pata{padding:44px 30px 44px}
-  .vd-pata h3{font-size:20px;margin:6px 0 12px}
-  .vd-pata .t{font-size:10.5px}
-  .vd-pata .v{font-size:9.5px}
+  .vd-scene .evcard h3{font-size:18px;margin-bottom:12px}
+  .vd-scene .evcard{padding:10px 10px 12px}
+  .vd-scene .evcard .t{font-size:9px}
   /* and the RSVP title, which was set for a desktop column */
   .rsvp .big{font-size:27px}
   .rsvp .eyebrow{font-size:8px;letter-spacing:.3em}
@@ -1072,7 +1065,10 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
   .rsvp{padding-left:54px;padding-right:54px}
   .rsvp::before{inset:34px}
   .rsvp::after{inset:38px}
-  .cts{padding-left:52px;padding-right:52px}
+  .cts{padding-left:12%;padding-right:12%}
+  .ct{padding:12px 10px;grid-template-columns:minmax(0,1fr) 128px;gap:6px}
+  .ct b{font-size:12px;overflow-wrap:anywhere}
+  .ct a{padding:10px 5px;font-size:9px;letter-spacing:.08em}
   .pata{padding-left:48px;padding-right:48px}
 }
 </style></head>
@@ -1272,16 +1268,14 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
         <i style="left:86%;animation-duration:3.6s;animation-delay:-3.8s"></i>
       </div>
       <div class="vd-dawn"></div>
-    </section>
-
-    <section class="vd-pata">
-      <i class="seam"></i>
-      <div class="eyebrow">THE LAST MORNING</div>
+      <div class="evcard">
+      <div class="k">THE LAST MORNING</div>
       <h3>Vidaayi</h3>
       <div class="t">Thursday 28th January 2027<br>10:30 AM</div>
       <div class="v">At the house</div>
-      <div class="rule"></div>
-      <a href="https://maps.app.goo.gl/ETewoV1iYmEoPjV68" target="_blank" rel="noopener">MAP</a><div class="rule b"></div>
+      <div class="mrule"></div>
+      <a href="https://maps.app.goo.gl/ETewoV1iYmEoPjV68" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
+      </div>
     </section>
 
     <section class="keep">
@@ -1303,13 +1297,10 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
         <div class="where">BY 23 SEPTEMBER 2026</div>
         <div class="rule"></div>
         <div class="gate" data-gate>
-          <p class="gtext">So that we know it is really you, please sign in with Google
-             before you answer. We only ever see your name and your email address &mdash;
-             nothing else, and nothing from your account.</p>
+          <p class="gtext">Sign in with Google to fill in your name and email, or continue without signing in.</p>
           <div class="gbtn" id="gbtn"></div>
-          <button type="button" class="gskip" data-gskip>Trouble signing in? Fill in the form without it</button>
-          <p class="fnote">No Google account, or the button will not open? Use the line above &mdash;
-            your answer still reaches us. You can also just call: the numbers are below.</p>
+          <button type="button" class="gskip" data-gskip>Continue without Google</button>
+          <p class="fnote" id="login-help" role="status">If Google opens a blank tab, close that tab and choose &ldquo;Continue without Google&rdquo; here. You can also open this invitation directly in Safari or Chrome.</p>
         </div>
         <div class="gwho" data-who>
           <span class="d"><b data-wname>&nbsp;</b><s data-wmail>&nbsp;</s></span>
@@ -1731,27 +1722,28 @@ tick(); setInterval(tick,1000);
 //    works. Add your GitHub Pages address as an Authorized JavaScript origin.
 var GOOGLE_CLIENT_ID = '419586690175-2otfmeuu1ql8nbp2g09cah0p240gk9n4.apps.googleusercontent.com';
 // 2. The Apps Script Web App /exec URL that appends a row to your Sheet.
-//    Leave it empty and answers are logged to the console instead of sent.
+//    A missing endpoint is a submission failure, never a success receipt.
 var RSVP_ENDPOINT    = 'https://script.google.com/macros/s/AKfycbxB7pxlAMS2oV2QWbO2arMHVnOM0eN8pjNyKtGtjAEgTR-rODYVi9t5gg4-qs4R67FJJw/exec';
 // ==============================================================================
 
 // Posted as text/plain on purpose: it keeps the request "simple", so the browser
 // does not send a CORS preflight, which an Apps Script Web App cannot answer.
 function submitRSVP(data, ok, fail){
-  if(!RSVP_ENDPOINT){ console.log('RSVP collected, no endpoint set:', data); ok&&ok(); return; }
-  fetch(RSVP_ENDPOINT,{method:'POST',redirect:'follow',
+  if(!RSVP_ENDPOINT){ fail&&fail(); return; }
+  var controller=new AbortController();
+  var timer=setTimeout(function(){ controller.abort(); },20000);
+  fetch(RSVP_ENDPOINT,{method:'POST',redirect:'follow',signal:controller.signal,
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify(data)})
     .then(function(r){
-      if(r.ok) return r.text();
-      // the redirect is the receipt - see pass34
-      if(r.redirected && /googleusercontent\.com/.test(r.url)) return '';
-      return Promise.reject(r.status);
+      if(!r.ok) throw new Error('RSVP HTTP '+r.status);
+      return r.json();
     })
-    .then(function(t){ var j={}; try{ j=JSON.parse(t); }catch(e){}
-      if(j.ok===false) return Promise.reject(j.error||'refused');
-      ok&&ok(); })
-    .catch(function(e){ console.warn('RSVP failed:', e); fail&&fail(); });
+    .then(function(j){
+      if(!j || j.ok!==true) throw new Error('RSVP was not acknowledged');
+      clearTimeout(timer); ok&&ok();
+    })
+    .catch(function(e){ clearTimeout(timer); console.warn('RSVP failed:', e); fail&&fail(); });
 }
 
 // ---- the gate -------------------------------------------------------------
@@ -1761,7 +1753,20 @@ var GCRED=null;
   // Open the gate and leave it open. Used when there is no client id yet, and
   // when Google's script does not arrive - a guest must never be stuck.
   function ungate(){ sec.classList.add('signed','ungated'); }
+  function returnToRSVP(){
+    st.classList.add('knocked','inside','opened');
+    sec.scrollIntoView({block:'start',behavior:'auto'});
+  }
+  var sk=sec.querySelector('[data-gskip]');
+  if(sk) sk.addEventListener('click',function(){ ungate(); returnToRSVP(); });
   if(!GOOGLE_CLIENT_ID){ ungate(); return; }
+  // Google sign-in is unreliable in embedded social-app browsers. Keep the
+  // existing guest RSVP option available instead of launching a broken popup.
+  if(/Instagram|FBAN|FBAV|FB_IAB|WhatsApp|; wv\)/i.test(navigator.userAgent)){
+    sec.querySelector('.gtext').textContent='To sign in with Google, open this invitation in Safari or Chrome using your app’s menu. You can also RSVP here without Google.';
+    return;
+  }
+
 
   function onCred(resp){
     GCRED = resp && resp.credential; if(!GCRED) return;
@@ -1778,7 +1783,9 @@ var GCRED=null;
     if(who.name && !nm.value) nm.value=who.name;
     sec.querySelector('[data-wname]').textContent = who.name || 'Signed in';
     sec.querySelector('[data-wmail]').textContent = who.email || '';
+    sec.classList.remove('ungated');
     sec.classList.add('signed');
+    returnToRSVP();
   }
 
   var sc=document.createElement('script');
@@ -1787,7 +1794,8 @@ var GCRED=null;
   sc.onload=function(){
     try{
       google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:onCred,
-        auto_select:false, cancel_on_tap_outside:true});
+        ux_mode:'popup', auto_select:false, cancel_on_tap_outside:true,
+        use_fedcm_for_button:true, button_auto_select:false});
       google.accounts.id.renderButton(document.getElementById('gbtn'),
         {theme:'outline', size:'large', text:'signin_with', shape:'pill', width:250});
     }catch(e){ ungate(); }
@@ -1799,8 +1807,7 @@ var GCRED=null;
        !(window.google&&google.accounts&&google.accounts.id)) ungate();
   },4000);
 
-  var sk=sec.querySelector('[data-gskip]');
-  if(sk) sk.addEventListener('click',function(){ ungate(); });
+
 
   var so=sec.querySelector('[data-signout]');
   if(so) so.addEventListener('click',function(){
@@ -2273,7 +2280,7 @@ else if(p.has('t')){
     {sel:'.scene.sg',  src:'assets/landing/music-sangeet.mp3', vol:0.95, wait:0},
     {sel:'.hl-scene',  src:'assets/landing/music-haldi.mp3',   vol:0.78, wait:0},
     {sel:'.wd-scene',  src:'assets/landing/music-wedding.mp3', vol:0.78, wait:0},
-    {sel:'.vd-scene',  sel2:'.vd-pata', src:'assets/landing/music-vidaayi.mp3', vol:0.85, wait:0}
+    {sel:'.vd-scene', src:'assets/landing/music-vidaayi.mp3', vol:0.85, wait:0}
   ];
   var FADE_IN=0.7, FADE_OUT=1.5, REST=5000, DWELL=200;
 
