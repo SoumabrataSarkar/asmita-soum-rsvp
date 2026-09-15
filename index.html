@@ -1698,7 +1698,12 @@ function submitRSVP(data, ok, fail){
   fetch(RSVP_ENDPOINT,{method:'POST',redirect:'follow',
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify(data)})
-    .then(function(r){ return r.ok ? r.text() : Promise.reject(r.status); })
+    .then(function(r){
+      if(r.ok) return r.text();
+      // the redirect is the receipt - see pass34
+      if(r.redirected && /googleusercontent\.com/.test(r.url)) return '';
+      return Promise.reject(r.status);
+    })
     .then(function(t){ var j={}; try{ j=JSON.parse(t); }catch(e){}
       if(j.ok===false) return Promise.reject(j.error||'refused');
       ok&&ok(); })
@@ -1799,6 +1804,21 @@ if(rf){
   comingSync();
   // the note is a correction, not a verdict: it goes the moment they fix it
   rf.addEventListener('input',function(){ rf.classList.remove('shownote'); });
+
+  // A number should not take letters, and a name should not take digits.
+  // Stripped as they type rather than argued about afterwards; this also
+  // covers pasting, because paste fires input too.
+  function keepTo(el,strip){
+    if(!el) return;
+    el.addEventListener('input',function(){
+      var caret=el.selectionStart, was=el.value, now=was.replace(strip,'');
+      if(now===was) return;
+      el.value=now;
+      try{ el.setSelectionRange(caret-1,caret-1); }catch(e){}
+    });
+  }
+  keepTo(document.getElementById('r-name'),  /[0-9]/g);
+  keepTo(document.getElementById('r-phone'), /[^0-9+()\-\s]/g);
 
   rf.addEventListener('submit',function(e){
     e.preventDefault();
