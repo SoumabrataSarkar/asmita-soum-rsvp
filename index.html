@@ -988,17 +988,13 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 .st-sub{font:700 7px/1 Philosopher,serif;letter-spacing:.3em;color:#8E5B33;
   text-align:center;margin:0 0 13px}
 
-/* the photographs drift past on their own. Touch or hover holds them still,
+/* the photographs drift past using native scrolling. Touch or hover holds them still,
    and the strip is a real scroller so you can push it along yourself. */
 .st-strip{margin:15px -18px 0;overflow-x:auto;overflow-y:hidden;
   -webkit-overflow-scrolling:touch;scrollbar-width:none}
 .st-strip::-webkit-scrollbar{display:none}
 .st-rail{display:flex;gap:10px;padding:0 18px;width:max-content;
-  animation:stDrift 30s linear infinite}
-.st-strip:hover .st-rail,.st-strip:active .st-rail{animation-play-state:paused}
-/* the rail holds the set twice; -50% lands one full set along, and the extra
-   half-gap is what makes the loop seamless instead of jolting by 5px */
-@keyframes stDrift{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 5px))}}
+}
 .st-ph{flex:0 0 auto;background:#FFFDF6;border:1px solid #E2CFA8;padding:5px 5px 5px;
   box-shadow:0 5px 16px rgba(60,34,20,.32);transform:rotate(-1.1deg)}
 .st-ph:nth-child(even){transform:rotate(1.3deg)}
@@ -1611,33 +1607,33 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
     <div class="st-sec">
       <h3 class="st-h">The Beginning</h3>
       <p class="st-p">We've known each other for 20 years. But here's the thing &mdash; we met as 9 year olds and were only in school together for 4 years. Four years. After that, life pulled us in different directions and we never actually imagined this is how our story is going to turn out. Back then, we were just two kids sharing auto rides and exchanging dictionaries. But little did we know.</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os01.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os02.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os03.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os04.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os05.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os01.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os02.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os03.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os04.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os05.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img src="assets/landing/os01.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os02.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os03.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os04.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os05.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os01.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os02.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os03.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os04.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os05.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
     <div class="st-sec">
       <h3 class="st-h">Staying Connected</h3>
       <p class="st-p">What kept us tethered through the distance was the weirdest thing: birthday calls. At first, we'd beg our parents for the phone on each other's birthdays. Just a quick call as a ritual. Then we moved to college and got our own phones, and the ritual stuck. Almost every single birthday, a call would come through. For 13 years, that's how we marked time.</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os06.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os07.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os08.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os09.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os10.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os06.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os07.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os08.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os09.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os10.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img src="assets/landing/os06.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os07.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os08.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os09.webp" width="394" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os10.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os06.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os07.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os08.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os09.webp" width="394" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os10.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
     <div class="st-sec">
       <h3 class="st-h">A Pattern of Missing</h3>
       <p class="st-p">Meanwhile, life kept pulling us apart. We'd end up in the same cities &mdash; Kolkata, Pune, Bangalore &mdash; but never at the right moment. Thirteen years of missing each other by days, months, sometimes years. Always close, never quite there.</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os11.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os12.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os13.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os14.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os15.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os11.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os12.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os13.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os14.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os15.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img src="assets/landing/os11.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os12.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os13.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os14.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os15.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os11.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os12.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os13.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os14.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os15.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
     <div class="st-sec dated">
       <h3 class="st-h">December 15th, 2023</h3>
       <div class="st-sub">BANGALORE</div>
       <p class="st-p">Finally she came to attend a friend's wedding and he was living in the same city at the same time. We stayed up the whole night under the stars &mdash; jamming, talking about agritech, throwing around startup ideas, having conversations where time just disappears. And just like that when the sun came up, something shifted. We looked at each other and we both realized we weren't &ldquo;just friends&rdquo; anymore.</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os16.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os17.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os18.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os19.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os20.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os16.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os17.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os18.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os19.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os20.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img src="assets/landing/os16.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os17.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os18.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os19.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os20.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os16.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os17.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os18.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os19.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os20.webp" width="700" height="525" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
     <div class="st-sec">
       <h3 class="st-h">Three Years Later</h3>
       <p class="st-p">Midnight sushi runs, monsoon treks, flights booked whenever we could afford them, bike rides through cities, Google Meet dates across time zones with a bowl of ramen, celebrating each other's small and big wins, impromptu trips that made no sense but felt like everything. We just kept showing up.</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os21.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os22.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os23.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os24.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os25.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os21.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os22.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os23.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os24.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os25.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img src="assets/landing/os21.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os22.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os23.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os24.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os25.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os21.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os22.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os23.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os24.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os25.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
     <div class="st-sec">
       <h3 class="st-h">The Sun and The Moon</h3>
       <p class="st-p">She's scared of water but she's learning how to surf with him. He's a nightowl but wakes up at 6:30 AM for runs for her. We're nothing alike. We're different and codependent as the sun and the moon. And now, after 20 years of being clueless about how life could actually take such a surreal turn like this, we're getting married!</p>
-      <div class="st-strip"><div class="st-rail" style="animation-duration:29s"><div class="st-ph"><img data-src="assets/landing/os26.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os27.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os28.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os29.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os26.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os27.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os28.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os29.webp" alt="Asmita and Soumabrata"></div></div></div>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:29s"><div class="st-ph"><img src="assets/landing/os26.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os27.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os28.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os29.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os26.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os27.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os28.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div><div class="st-ph"><img src="assets/landing/os29.webp" width="525" height="700" loading="eager" decoding="async" alt="Asmita and Soumabrata"></div></div></div>
     </div>
       <div class="st-end">
         <div class="st-rule"></div>
@@ -1670,9 +1666,7 @@ window.__bbPre=(function(){
   var ORDER=['sfx-knock.mp3','sfx-switch.mp3','sfx-engine.mp3','sfx-conch.mp3',
              'music-hall.mp3','music-sangeet.mp3','music-haldi.mp3',
              'music-wedding.mp3','music-vidaayi.mp3','bb-study.webp'];
-  // The 29 photographs come before the letter's song: the song can fade in
-  // late without anyone noticing, a blank photograph cannot.
-  for(var i=1;i<=29;i++) ORDER.push('os'+(i<10?'0':'')+i+'.webp');
+  // Photos use ordinary eager image requests, independently of this audio queue.
   ORDER.push('music-story.mp3');
   function url(n){ return READY[n]||null; }
   function onReady(n,fn){
@@ -1924,22 +1918,24 @@ else if(p.has('t')){
          if(C){ window.__bbAC=new C(); if(window.__bbAC.state==='suspended') window.__bbAC.resume(); } }
     catch(e){ window.__bbAC=null; }
   }
-  // iOS admits audio one element at a time, and only during a real tap.
-  // Playing and instantly pausing an element inside the knock is what admits
-  // it. Volume is forced to zero for that instant and restored immediately -
-  // forget the restore and the whole page is silent, which is the classic way
-  // this particular fix goes wrong.
+  // Prime silently. A real cue cancels this cleanup so a late promise/timer
+  // cannot pause or unmute audio that has since been requested by the scene.
   function unlock1(a){
-    if(!a) return;
+    if(!a || a.__ok || a.__unlocking) return;
+    a.__unlocking=true;
+    var m=a.muted, v=a.volume, timer;
+    function fin(){
+      clearTimeout(timer);
+      if(!a.__unlocking) return;
+      a.__unlocking=false;
+      try{ a.pause(); a.currentTime=0; a.volume=v; a.muted=m; a.__ok=true; }catch(e){}
+    }
     try{
-      var v=a.volume, m=a.muted;
       a.muted=true; a.volume=0;
-      var fin=function(){ try{ a.pause(); a.currentTime=0;
-                               a.volume=v||1; a.muted=m; a.__ok=true; }catch(e){} };
-      setTimeout(fin,800);          // belt: a play() that never settles must
-      var p=a.play();               // not leave the element muted forever
+      timer=setTimeout(fin,800);
+      var p=a.play();
       if(p&&p.then) p.then(fin,fin); else fin();
-    }catch(e){}
+    }catch(e){ fin(); }
   }
   window.__bbUnlock1=unlock1;
   window.__bbSfx=function(){ var o={}; for(var k in SFX){ var a=SFX[k];
@@ -1965,7 +1961,7 @@ else if(p.has('t')){
   function play(n){
     if(!sndOn) return;                       // checked at FIRE time, not schedule time
     var a=SFX[n]; if(!a) return;
-    try{ a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
+    try{ a.__unlocking=false; a.muted=false; a.volume=1; a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
   }
   function hush(){ for(var k in SFX){ try{ SFX[k].pause(); }catch(e){} } }
   function cue(ms,n){ sfxT.push(setTimeout(function(){ play(n); }, ms)); }
@@ -2129,6 +2125,38 @@ else if(p.has('t')){
     if(sndOn) songOn(); else songFade(0,0.3);
   };
 
+  // Use native scrolling for both drift and swipes. Transforming an already
+  // scrolled rail can leave a blank strip even though every image is loaded.
+  var photoStrips=[].slice.call(st.querySelectorAll('.st-strip'));
+  photoStrips.forEach(function(strip){
+    var until=0, touching=false, last=0, carry=0;
+    strip.addEventListener('pointerdown',function(){ touching=true; });
+    function release(){ touching=false; until=performance.now()+2000; }
+    strip.addEventListener('pointerup',release);
+    strip.addEventListener('pointercancel',release);
+    strip.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse') touching=true; });
+    strip.addEventListener('pointerleave',release);
+    strip.addEventListener('wheel',function(){ until=performance.now()+2000; },{passive:true});
+    function drift(now){
+      var dt=last?Math.min(now-last,50):0; last=now;
+      var r=strip.getBoundingClientRect(), view=document.getElementById('story').getBoundingClientRect();
+      if(st.classList.contains('instory') && r.bottom>view.top && r.top<view.bottom &&
+         !touching && now>until && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+        var rail=strip.firstElementChild, photos=rail.children, half=photos.length/2;
+        var first=photos[0], duplicate=photos[half];
+        var span=duplicate?duplicate.offsetLeft-first.offsetLeft:0;
+        if(span>0 && strip.scrollWidth>strip.clientWidth){
+          var seconds=parseFloat(rail.style.animationDuration)||36;
+          carry+=span*dt/(seconds*1000);
+          var step=Math.floor(carry); carry-=step;
+          if(step) strip.scrollLeft=(strip.scrollLeft+step)%span;
+        }
+      }
+      requestAnimationFrame(drift);
+    }
+    requestAnimationFrame(drift);
+  });
+
   // --- the rail. The letter is long and nothing else said so.
   var scEl=null, scM=null;
   function scrollCue(){
@@ -2158,6 +2186,8 @@ else if(p.has('t')){
     if(b) b.setAttribute('aria-hidden','true');
   }
   function openStory(){
+    loadStudy();
+    st.querySelectorAll('.st-strip').forEach(function(strip){ strip.scrollLeft=0; });
     st.classList.add('instory','storyread');
     var n=document.getElementById('story');
     if(n){ n.setAttribute('aria-hidden','false'); n.scrollTop=0; }
@@ -2257,6 +2287,7 @@ else if(p.has('t')){
     if(t.el) return;
     var f=t.src.split('/').pop(), u=window.__bbPre.url(f);
     t.el=new Audio(u||t.src);
+    t.el.muted=true; // remain silent until apply() explicitly selects this scene
     // A track may only be heard if the journey asked for it. unlock1 plays
     // every element muted to get iOS to admit it, and on iOS that pause can
     // lose the race - this pauses it again the instant it starts.
@@ -2271,7 +2302,7 @@ else if(p.has('t')){
     window.__bbPre.onReady(f,function(nu){
       if(!t.el||t.el.src===nu||!t.el.paused||t.el.currentTime>0) return;
       t.el.src=nu; t.el.preload='auto'; t.el.load();
-      if(t.el.__ok&&window.__bbUnlock1) window.__bbUnlock1(t.el);
+      // The resumed AudioContext handles later sources; do not play to preload.
     });
     // A track that arrives after its scene has already begun joins at the
     // point it would have reached, instead of starting from the top.
@@ -2300,10 +2331,13 @@ else if(p.has('t')){
     catch(e){ t.g=null; }
   }
   function apply(t){
-    var want = (typeof sndOn==='undefined'||sndOn) && t.vis && !t.resting;
+    var want = st0 && st0.classList.contains('inside') &&
+      !window.__bbQuiet && !(window.__bbHush && performance.now()<window.__bbHush) &&
+      (typeof sndOn==='undefined'||sndOn) && t.vis && !t.resting;
     t.want = want;                             // the guard above reads this
     if(want){
       wire(t); graph(t);
+      t.el.__unlocking=false; t.el.muted=false; t.el.volume=1;
       if(!t.since) t.since=performance.now();   // when this scene began waiting
       if(t.el.paused){ t.fading=false; var p=t.el.play(); if(p&&p.catch) p.catch(function(){}); }
       ramp(t,t.vol,FADE_IN);
@@ -2375,7 +2409,11 @@ else if(p.has('t')){
   // Called from the knock and the skip, so every track exists and can be
   // admitted while the tap is still live.
   window.__bbMusicUnlock=function(){
-    TRACKS.forEach(function(t){ wire(t); if(window.__bbUnlock1) window.__bbUnlock1(t.el); });
+    TRACKS.forEach(function(t){
+      wire(t); graph(t); // zero-gain graph must exist BEFORE the priming play
+      if(!t.want){ t.el.muted=true; ramp(t,0,0); }
+      if(window.__bbUnlock1) window.__bbUnlock1(t.el);
+    });
   };
   // the study asks for silence through the same recompute that owns every
   // other decision about which track is playing, so the two cannot disagree
