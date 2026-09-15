@@ -1640,11 +1640,11 @@ window.__bbPre=(function(){
   // letter's song is 1.4 MB and has the longest runway, so it comes last.
   var ORDER=['sfx-knock.mp3','sfx-switch.mp3','sfx-engine.mp3','sfx-conch.mp3',
              'music-hall.mp3','music-sangeet.mp3','music-haldi.mp3',
-             'music-wedding.mp3','music-vidaayi.mp3','music-story.mp3',
-             'bb-study.webp'];
-  // the letter's 29 photographs, last of all. They used to begin downloading
-  // at the moment the study door was tapped, which is why they arrived blank.
+             'music-wedding.mp3','music-vidaayi.mp3','bb-study.webp'];
+  // The 29 photographs come before the letter's song: the song can fade in
+  // late without anyone noticing, a blank photograph cannot.
   for(var i=1;i<=29;i++) ORDER.push('os'+(i<10?'0':'')+i+'.webp');
+  ORDER.push('music-story.mp3');
   function url(n){ return READY[n]||null; }
   function onReady(n,fn){
     if(READY[n]){ fn(READY[n]); return; }
@@ -1655,19 +1655,34 @@ window.__bbPre=(function(){
     if(w) w.forEach(function(f){ try{ f(u); }catch(e){} });
   }
   // One at a time. Ten at once on a weak connection means all ten are late.
-  function next(i){
-    if(i>=ORDER.length) return;
-    var n=ORDER[i];
+  var at=0;
+  function next(){
+    if(at>=ORDER.length) return;
+    var n=ORDER[at++];
+    if(READY[n]) return next();
     fetch('assets/landing/'+n).then(function(r){ return r.ok? r.blob():null; })
       .then(function(b){ if(b) done(n,URL.createObjectURL(b)); })
-      .catch(function(){})                 // a failure is not fatal: the
-      .then(function(){ next(i+1); });     // element falls back to the URL
+      .catch(function(){})              // a failure is not fatal
+      .then(function(){ next(); });
   }
-  function start(){ if(started) return; started=true; next(0); }
+  // Move things still wanted to the head of what is left to fetch. Used when
+  // the guest reaches the hall, and again if they open the study early.
+  function prioritise(list){
+    var want=[];
+    list.forEach(function(n){
+      if(!READY[n] && ORDER.indexOf(n)>=at && want.indexOf(n)<0) want.push(n);
+    });
+    if(!want.length) return;
+    var rest=ORDER.slice(at).filter(function(n){ return want.indexOf(n)<0; });
+    ORDER = ORDER.slice(0,at).concat(want, rest);
+  }
+  function start(){ if(started) return; started=true; next(); }
   // Only once the house is drawn, so artwork never competes with audio.
   if(document.readyState==='complete') setTimeout(start,0);
   else window.addEventListener('load',function(){ setTimeout(start,0); });
-  return {url:url, onReady:onReady, order:ORDER, ready:READY};
+  return {url:url, onReady:onReady, prioritise:prioritise,
+          order:ORDER, ready:READY, photos:function(){
+            return ORDER.filter(function(n){ return /^os\d+\.webp$/.test(n); }); }};
 })();
 
 var st=document.getElementById('stage');
@@ -1944,7 +1959,12 @@ else if(p.has('t')){
   // Only the brass knocks. Nothing else on the page listens for a click, so the
   // sequence cannot be jumped by a stray tap - however many times you tap.
   var enterT=null;
-  function enter(){ if(enterT){clearTimeout(enterT);enterT=null;} st.classList.add('inside'); }
+  function enter(){ if(enterT){clearTimeout(enterT);enterT=null;} st.classList.add('inside');
+    // In the hall the study door is two taps away - get the photographs moving
+    // now. The sound effects are long since fetched and the hall's track is
+    // early in the queue, so nothing audible is delayed by this.
+    try{ if(window.__bbPre) window.__bbPre.prioritise(window.__bbPre.photos()); }catch(e){}
+  }
   function knock(){
     if(st.classList.contains('knocked')||st.classList.contains('inside')) return;
     st.classList.add('knocked');
@@ -1997,13 +2017,21 @@ else if(p.has('t')){
     if(studyLoaded) return; studyLoaded=true;
     songPrime();                    // start fetching the song now, not at the letter
     // one pass, first open only: hand every data-src its real src
+    var pending=[];
     st.querySelectorAll('#study [data-src],#story [data-src]').forEach(function(im){
-      var d=im.getAttribute('data-src');
-      // take the copy the runner already holds, if it arrived
-      im.src=(window.__bbPre && window.__bbPre.url(d.split('/').pop())) || d;
-      im.removeAttribute('data-src');
-      im.decoding='sync';
+      var d=im.getAttribute('data-src'), f=d.split('/').pop();
+      im.removeAttribute('data-src'); im.decoding='sync';
+      var u=window.__bbPre && window.__bbPre.url(f);
+      if(u){ im.src=u; return; }
+      if(!window.__bbPre){ im.src=d; return; }
+      // Wait for the runner. Starting our own download here would race the
+      // one already in flight for the same file and slow both of them.
+      pending.push(f);
+      var landed=false;
+      window.__bbPre.onReady(f,function(nu){ landed=true; if(!im.src) im.src=nu; });
+      setTimeout(function(){ if(!landed && !im.src) im.src=d; }, 10000);
     });
+    if(window.__bbPre && pending.length) window.__bbPre.prioritise(pending);
   }
   // --- the letter's own song. One <audio> through its own GainNode on the same
   // AudioContext the rest of the page uses, because iOS ignores el.volume.
