@@ -3,8 +3,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
 <link rel="preload" as="font" type="font/woff2" href="assets/landing/agraham.woff2?v=2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/landing/centralwell.woff2?v=1" crossorigin>
 <style>
 @font-face{font-family:Agraham;src:url('assets/landing/agraham.woff2?v=2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Centralwell;src:url('assets/landing/centralwell.woff2?v=1') format('woff2');
   font-weight:400;font-style:normal;font-display:swap}
 html,body{margin:0;background:#241110;font-family:Philosopher,serif}
 *{box-sizing:border-box}
@@ -91,7 +94,7 @@ html,body{margin:0;background:#241110;font-family:Philosopher,serif}
 /* the welcome, over a scrim so it reads on the floor */
 .hfoot{position:absolute;left:0;right:0;bottom:0;height:17%;z-index:7;pointer-events:none;
   background:linear-gradient(rgba(30,14,12,0),rgba(30,14,12,.5) 46%,rgba(30,14,12,.82) 100%)}
-.hwel{position:absolute;left:22px;right:22px;bottom:26px;z-index:8;text-align:center;opacity:0;
+.hwel{position:absolute;left:22px;right:22px;bottom:9%;z-index:8;text-align:center;opacity:0;
   pointer-events:none;font:400 14px/1.35 'Cormorant Garamond',serif;color:#F7EEDC;
   text-shadow:0 1px 5px rgba(18,9,7,.95),0 0 16px rgba(18,9,7,.8)}
 .inside .hwel{animation:hIn 1s ease-out 2.6s forwards}
@@ -116,6 +119,7 @@ html,body{margin:0;background:#241110;font-family:Philosopher,serif}
 .eyebrow{font:400 9px/1 Philosopher,serif;letter-spacing:.38em;color:#9A4A22}
 .big{font:400 36px/1.38 Agraham,'Cormorant Garamond',serif;margin:10px 0 10px}
 .big .num{font-family:Philosopher,serif;font-weight:400;font-size:1.7em;line-height:0;letter-spacing:.005em}
+.big .cw{font-family:Centralwell,'Cormorant Garamond',serif;font-weight:400;font-size:1.5em;line-height:0}
 .where{font:400 11px/1 Philosopher,serif;letter-spacing:.2em;color:#8E5B33}
 .rule{width:64px;height:1px;background:#C79A6A;margin:22px auto}
 
@@ -433,7 +437,7 @@ html,body{margin:0;background:#241110;font-family:Philosopher,serif}
 .keepcard{background:#F7EEDC;border:1px solid #C79A6A;box-shadow:0 8px 22px rgba(60,30,15,.22);
   padding:22px 16px 20px}
 .keepcard .k{font:400 8px/1 Philosopher,serif;letter-spacing:.34em;color:#9A4A22}
-.keepcard .nm{font:600 19px/1.15 'Cormorant Garamond',serif;margin:7px 0 14px;color:#3A170F}
+.keepcard .nm{font:400 30px/1.25 Centralwell,'Cormorant Garamond',serif;margin:7px 0 14px;color:#3A170F}
 .krow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
   padding:9px 2px;border-top:1px solid rgba(199,154,106,.5);text-align:left}
 .krow:first-of-type{border-top:0}
@@ -644,9 +648,9 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 .banglow{position:absolute;left:6%;top:40%;width:88%;height:40%;z-index:8;opacity:0;
   pointer-events:none;mix-blend-mode:screen;
   background:radial-gradient(58% 62% at 50% 50%,rgba(255,222,150,.9),rgba(255,190,95,.3) 52%,rgba(255,180,70,0) 100%)}
-.bantxt .s{font:700 38px Philosopher,serif;letter-spacing:13px;fill:#8E4A1C}
+.bantxt .s{font:400 62px Centralwell,'Cormorant Garamond',serif;letter-spacing:0;fill:#8E4A1C}
 .bantxt .n{font:400 50px Agraham,'Cormorant Garamond',serif;fill:#5A1410}
-.bantxt .d{font:700 40px Philosopher,serif;letter-spacing:7px;fill:#8E1B14}
+.bantxt .d{font:400 52px Centralwell,'Cormorant Garamond',serif;letter-spacing:0;fill:#8E1B14}
 
 /* --- the taxi --- */
 .taxi{position:absolute;left:-18%;top:82%;width:66%;z-index:9}
@@ -1006,6 +1010,17 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
   color:#8E1B14;margin:12px 0 0}
 .failed .failnote{display:block}
 .send[disabled]{opacity:.5;cursor:default}
+
+/* Phone widths. The floral frame is a full-bleed image, so its ornament takes
+   a fixed share of the width - at 375px it reaches about 30px in, and the RSVP
+   fields (44px) and the contact rows (26px) were running underneath it. */
+@media (max-width:520px){
+  .rsvp{padding-left:54px;padding-right:54px}
+  .rsvp::before{inset:34px}
+  .rsvp::after{inset:38px}
+  .cts{padding-left:52px;padding-right:52px}
+  .pata{padding-left:48px;padding-right:48px}
+}
 </style></head>
 <body>
 <div class="stage" id="stage">
@@ -1043,7 +1058,7 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
 
     <section class="pata"><i class="seam"></i>
       <div class="eyebrow">SAVE THE DATE</div>
-      <div class="big"><span class="num">26</span>th &amp; <span class="num">27</span>th<br>January <span class="num">2027</span></div>
+      <div class="big"><span class="cw">26th &amp; 27th</span><br>January <span class="num">2027</span></div>
       <div class="where">BARRACKPORE &middot; KOLKATA</div>
       <div class="rule"></div>
       <div class="cd" id="cd">
@@ -1152,7 +1167,7 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
         <div class="k">TURMERIC AND SUNLIGHT</div>
         <h3>Haldi</h3>
         <div class="t">Wednesday 27th January 2027<br>11:00 AM</div>
-        <div class="v">HRS Bhavan, Barrackpore</div>
+        <div class="v">HRS Bhawan, Barrackpore</div>
         <div class="mrule"></div>
         <a href="https://maps.app.goo.gl/HmYmd2ohnetHe85w6" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
       </div>
@@ -1182,7 +1197,7 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
         <div class="k">THE LONG NIGHT</div>
         <h3>Wedding</h3>
         <div class="t">Wednesday 27th January 2027<br>7:30 PM</div>
-        <div class="v">HRS Bhavan, Barrackpore</div>
+        <div class="v">HRS Bhawan, Barrackpore</div>
         <div class="mrule"></div>
         <a href="https://maps.app.goo.gl/HmYmd2ohnetHe85w6" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
         <div class="x">Muhurat at 11:50 PM &middot; stay as long as you like</div>
@@ -1220,8 +1235,8 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
         <div class="k">ASMITA &amp; SOUMABRATA</div>
         <div class="nm">One card to keep</div>
         <div class="krow"><em>Sangeet</em><span>26th Jan, 6:30 PM &middot; Netaji Sporting Club, Barrackpore</span></div>
-        <div class="krow"><em>Haldi</em><span>27th Jan, 11:00 AM &middot; HRS Bhavan, Barrackpore</span></div>
-        <div class="krow"><em>Wedding</em><span>27th Jan, 7:30 PM &middot; HRS Bhavan, Barrackpore<br>Muhurat 11:50 PM</span></div>
+        <div class="krow"><em>Haldi</em><span>27th Jan, 11:00 AM &middot; HRS Bhawan, Barrackpore</span></div>
+        <div class="krow"><em>Wedding</em><span>27th Jan, 7:30 PM &middot; HRS Bhawan, Barrackpore<br>Muhurat 11:50 PM</span></div>
         <div class="krow"><em>Vidaayi</em><span>28th Jan, 10:30 AM &middot; The house</span></div>
       </div>
       <div class="note">FORMAL INVITATION AND DETAILED<br>LOGISTICS TO FOLLOW</div>
@@ -1373,15 +1388,15 @@ textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
       <img src="assets/landing/el-banner2.webp" alt="">
       <div class="banglow"></div>
       <svg class="bantxt" viewBox="0 0 1216 720" role="img"
-           aria-label="Save the date. Asmita and Soumabrata. 27th January 2027.">
+           aria-label="Save the date. Asmita and Soumabrata. 27th January, 2027.">
         <defs>
           <path id="bta" fill="none" d="M200 335 Q608 475 1016 335"/>
           <path id="btb" fill="none" d="M200 421 Q608 561 1016 421"/>
           <path id="btc" fill="none" d="M200 485 Q608 625 1016 485"/>
         </defs>
-        <text class="s"><textPath href="#bta" startOffset="50.6%" text-anchor="middle">SAVE THE DATE</textPath></text>
+        <text class="s"><textPath href="#bta" startOffset="50.6%" text-anchor="middle">Save the Date</textPath></text>
         <text class="n"><textPath href="#btb" startOffset="50%"   text-anchor="middle">Asmita &amp; Soumabrata</textPath></text>
-        <text class="d"><textPath href="#btc" startOffset="50.4%" text-anchor="middle">27th JANUARY 2027</textPath></text>
+        <text class="d"><textPath href="#btc" startOffset="50.4%" text-anchor="middle">27th January, 2027</textPath></text>
       </svg>
     </div>
 
