@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#241110;font-family:Philosopher,serif}
+*{box-sizing:border-box}
+.stage{position:relative;width:min(100%,430px,calc(100vh * 43 / 90));aspect-ratio:43/90;
+  margin:0 auto;overflow:hidden;background:#241110;user-select:none}
+@supports (height:100dvh){.stage{width:min(100%,430px,calc(100dvh * 43 / 90))}}
+.stage img{display:block}
+.full{width:100%;position:absolute;left:0;top:0}
+
+/* ============ SCROLLING DOCUMENT ============ */
+.doc{position:absolute;inset:0;z-index:1;overflow:hidden;scroll-behavior:smooth}
+.doc::-webkit-scrollbar{width:0}
+
+/* ============ ENTRANCE HALL - the junction ============ */
+.sec-hall{position:relative;width:100%;aspect-ratio:866/1816;overflow:hidden}
+.sec-hall>img.hbg{width:100%;display:block}
+
+/* the room is dark until the lamps catch */
+.hnight{position:absolute;inset:0;z-index:4;pointer-events:none;background:#0A1030;
+  opacity:.74;mix-blend-mode:multiply}
+.inside .hnight{animation:hWake 2.1s ease-out 1.25s forwards}
+@keyframes hWake{to{opacity:0}}
+
+/* the two of them, and the shadow that puts them on the floor */
+.gshadow{position:absolute;left:36.6%;top:64.1%;width:26.9%;height:2.1%;z-index:3;
+  pointer-events:none;opacity:0;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(22,9,7,.62),rgba(22,9,7,.22) 52%,rgba(22,9,7,0) 100%)}
+.greet{position:absolute;left:36.35%;top:41.85%;width:27.42%;height:23.13%;z-index:3;opacity:0}
+.greet img{width:100%;height:100%;display:block}
+.inside .gshadow{animation:hIn .8s ease-out 1.95s forwards}
+.inside .greet{animation:hIn .9s cubic-bezier(.3,0,.2,1) 1.95s forwards}
+@keyframes hIn{to{opacity:1}}
+
+/* lamplight */
+.hglow{position:absolute;z-index:5;pointer-events:none;mix-blend-mode:screen;opacity:0;
+  background:radial-gradient(closest-side,rgba(255,218,146,.95),rgba(255,180,76,.3) 46%,rgba(255,170,58,0) 100%)}
+.hl-lampL{left:19.6%;top:52.9%;width:27%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.hl-lampR{left:80.1%;top:52.9%;width:27%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.hl-pend{left:50%;top:14.2%;width:34%;aspect-ratio:1.6;transform:translate(-50%,-50%)}
+.hl-poolL{left:19.6%;top:74%;width:36%;height:5.4%;transform:translate(-50%,-50%)}
+.hl-poolR{left:80.1%;top:74%;width:36%;height:5.4%;transform:translate(-50%,-50%)}
+.hl-mid{left:50%;top:63%;width:54%;height:15%;transform:translate(-50%,-50%)}
+.inside .hl-lampL{animation:hIn .5s ease-out .3s forwards,hFlick 2.6s ease-in-out .8s infinite}
+.inside .hl-lampR{animation:hIn .5s ease-out .7s forwards,hFlick 3.1s ease-in-out 1.2s infinite}
+.inside .hl-pend {animation:hIn .6s ease-out 1.1s forwards,hPulse 5.5s ease-in-out 1.7s infinite}
+.inside .hl-poolL{animation:hIn 1s ease-out 1.5s forwards}
+.inside .hl-poolR{animation:hIn 1s ease-out 1.7s forwards}
+.inside .hl-mid  {animation:hIn 1.2s ease-out 1.8s forwards}
+@keyframes hFlick{0%,100%{opacity:1}21%{opacity:.84}39%{opacity:1}62%{opacity:.78}83%{opacity:.94}}
+@keyframes hPulse{0%,100%{opacity:1}50%{opacity:.9}}
+
+/* what is through each door, warming from the inside */
+.dwarm{position:absolute;z-index:2;pointer-events:none;mix-blend-mode:screen;opacity:0;top:21.5%;height:34.7%}
+.dw-L{left:20.2%;width:21.9%;
+  background:radial-gradient(58% 46% at 50% 72%,rgba(255,176,88,.8),rgba(255,146,54,0) 100%)}
+.dw-R{left:57.2%;width:22.5%;
+  background:radial-gradient(58% 46% at 50% 72%,rgba(198,230,255,.62),rgba(168,214,255,0) 100%)}
+.inside .dw-L{animation:hIn 1.1s ease-out 3.2s forwards}
+.inside .dw-R{animation:hIn 1.1s ease-out 3.4s forwards}
+
+/* dust in the lamplight */
+.hmotes{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none}
+.hmotes i{position:absolute;bottom:16%;width:3px;height:3px;border-radius:50%;
+  background:#FFE6B4;opacity:0;animation:hMote linear infinite}
+@keyframes hMote{0%{opacity:0;transform:translateY(0) translateX(0)}
+  12%{opacity:.7}70%{opacity:.5}
+  100%{opacity:0;transform:translateY(-190px) translateX(22px)}}
+
+/* the two signs, hung in the doorways */
+.dlab{position:absolute;z-index:7;top:29.5%;text-align:center;opacity:0;pointer-events:none;
+  background:rgba(247,238,220,.95);border:1px solid #B8895A;border-radius:2px;padding:5px 4px 6px;
+  box-shadow:0 4px 14px rgba(0,0,0,.45);
+  font:700 6.5px/1 Philosopher,serif;letter-spacing:.17em;color:#6E1414}
+.dlab b{display:block;font-weight:400;font-size:8px;letter-spacing:.04em;color:#8E5B33;margin-top:3px}
+.dlab-L{left:20.2%;width:21.9%}
+.dlab-R{left:57.2%;width:22.5%}
+.inside .dlab-L{animation:hIn .7s ease-out 3.7s forwards,dNudge 3.6s ease-in-out 4.5s infinite}
+.inside .dlab-R{animation:hIn .7s ease-out 3.85s forwards,dNudge 3.6s ease-in-out 4.75s infinite}
+/* a small lift and settle, twice a cycle - enough to read as "tap me",
+   not enough to jitter while you are trying to read it */
+@keyframes dNudge{0%,68%,100%{transform:translateY(0)}
+  76%{transform:translateY(-4px)}84%{transform:translateY(1px)}90%{transform:translateY(0)}}
+
+/* the welcome, over a scrim so it reads on the floor */
+.hfoot{position:absolute;left:0;right:0;bottom:0;height:17%;z-index:7;pointer-events:none;
+  background:linear-gradient(rgba(30,14,12,0),rgba(30,14,12,.5) 46%,rgba(30,14,12,.82) 100%)}
+.hwel{position:absolute;left:22px;right:22px;bottom:26px;z-index:8;text-align:center;opacity:0;
+  pointer-events:none;font:400 14px/1.35 'Cormorant Garamond',serif;color:#F7EEDC;
+  text-shadow:0 1px 5px rgba(18,9,7,.95),0 0 16px rgba(18,9,7,.8)}
+.inside .hwel{animation:hIn 1s ease-out 2.6s forwards}
+
+/* the hit zones. Nothing else in the hall takes a click. */
+.dhit{position:absolute;z-index:9;top:20%;height:39%;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.dhit:active{transform:scale(.985)}
+.dhit-L{left:18.4%;width:25.5%}
+.dhit-R{left:56%;width:26%}
+
+/* the scroll stays locked until the guest goes right */
+.inside .doc{overflow:hidden}
+.inside.opened .doc{overflow-y:auto}
+
+/* ============ PATA PAPER PANEL SYSTEM ============ */
+.pata{position:relative;background:#F2E8D5;padding:64px 36px 64px;color:#3A170F;text-align:center}
+.pata i.seam{position:absolute;left:0;right:0;top:-46px;height:46px;pointer-events:none;
+  background:linear-gradient(rgba(242,232,213,0),#F2E8D5)}
+.pata::before{content:"";position:absolute;inset:32px;border:1px solid #C79A6A;pointer-events:none}
+.pata::after{content:"";position:absolute;inset:36px;border:1px solid rgba(142,91,51,.35);pointer-events:none}
+.eyebrow{font:400 9px/1 Philosopher,serif;letter-spacing:.38em;color:#9A4A22}
+.big{font:600 33px/1.12 'Cormorant Garamond',serif;margin:12px 0 6px}
+.where{font:400 11px/1 Philosopher,serif;letter-spacing:.2em;color:#8E5B33}
+.rule{width:64px;height:1px;background:#C79A6A;margin:22px auto}
+
+.cd{display:flex;justify-content:center;gap:6px;margin:4px 0 12px}
+.cd div{flex:0 0 62px;background:#fff;border:1px solid #DFCBAA;padding:9px 0 7px}
+.cd u{display:block;font:600 26px/1 'Cormorant Garamond',serif;text-decoration:none;color:#6E1414}
+.cd s{display:block;font:400 7.5px/1 Philosopher,serif;letter-spacing:.22em;color:#9A4A22;
+  text-decoration:none;margin-top:5px}
+.cdlabel{font:400 10px/1.6 Philosopher,serif;letter-spacing:.1em;color:#6E3418}
+.note{font:400 9px/1.7 Philosopher,serif;letter-spacing:.16em;color:#8E5B33;margin-top:26px}
+
+
+/* ============ EVENT SCENE SYSTEM ============ */
+.scene{position:relative;width:100%;aspect-ratio:866/1815;overflow:hidden;
+  view-timeline-name:--sv;view-timeline-axis:block}
+.scene>img.bg{width:100%;display:block}
+.scene .glowdot{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen}
+
+.evcard{position:absolute;left:11%;width:78%;bottom:6.5%;padding:20px 16px 22px;text-align:center;
+  background:rgba(247,238,220,.95);border:1px solid #C79A6A;
+  box-shadow:0 0 0 3px rgba(247,238,220,.35),0 12px 30px rgba(20,10,6,.45);color:#3A170F}
+.evcard .k{font:400 7.5px/1 Philosopher,serif;letter-spacing:.34em;color:#9A4A22}
+.evcard h3{font:600 27px/1.05 'Cormorant Garamond',serif;margin:8px 0 10px;color:#6E1414}
+.evcard .t{font:700 11.5px/1.5 Philosopher,serif;letter-spacing:.06em}
+.evcard .v{font:400 10px/1.5 Philosopher,serif;color:#6B4A32;margin-top:8px}
+.evcard .mrule{width:34px;height:1px;background:#C79A6A;margin:12px auto 10px}
+.mrule.b{margin:10px auto 0}
+.rule.b{margin:22px auto 0}
+.evcard a{font:400 9px/1 Philosopher,serif;letter-spacing:.2em;color:#8E1B14;
+  text-decoration:none}
+.evcard .x{font:400 8.5px/1.4 Philosopher,serif;color:#8A6A50;margin-top:9px;font-style:italic}
+
+/* ---------- SANGEET ---------- */
+/* The courtyard you arrive in IS the courtyard the sangeet happens in. Rather
+   than show it twice, the empty room lies over the dressed one and fades: the
+   canopy drops into an empty courtyard, the bulbs come on, then the people
+   arrive. Base state is the FINAL state - a browser with no scroll timeline
+   shows the party, never an empty room it cannot clear. */
+.sg-empty{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.sg-canopy{position:absolute;left:0;top:0;width:100%;height:12.45%}
+.sg-canopy i{display:block;width:100%;height:100%;transform-origin:50% 0;
+  animation:sgSway 7s ease-in-out infinite}
+.sg-canopy img{width:100%;height:100%;display:block}
+@keyframes sgSway{0%,100%{transform:rotate(-.22deg) translateY(0)}
+  50%{transform:rotate(.22deg) translateY(2px)} }
+
+.sg-bulb{width:5.4%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.sg-bulb i{display:block;width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,236,180,.95),rgba(255,205,110,.42) 42%,rgba(255,190,80,0) 100%);
+  animation:sgTwinkle 3.4s ease-in-out infinite}
+@keyframes sgTwinkle{0%,100%{opacity:.6}50%{opacity:1} }
+
+.sg-lamp{width:11%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side,rgba(255,226,150,.85),rgba(255,180,70,.3) 45%,rgba(255,170,50,0) 100%);
+  animation:sgFlick 1.9s ease-in-out infinite}
+@keyframes sgFlick{0%,100%{opacity:.72;transform:translate(-50%,-50%) scale(1)}
+  30%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}
+  55%{opacity:.62;transform:translate(-50%,-50%) scale(.94)}
+  78%{opacity:.92;transform:translate(-50%,-50%) scale(1.05)} }
+
+.sg-warm{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;
+  background:radial-gradient(70% 40% at 50% 55%,rgba(255,180,80,.5),rgba(255,150,50,0) 100%);
+  animation:sgBreathe 6s ease-in-out infinite}
+@keyframes sgBreathe{0%,100%{opacity:.35}50%{opacity:.7} }
+
+.petals{position:absolute;left:0;right:0;top:8%;height:52%;overflow:hidden;pointer-events:none}
+.petals i{position:absolute;top:-4%;width:9px;height:7px;border-radius:60% 40% 55% 45%;
+  background:#F08A24;opacity:0;animation:sgFall linear infinite}
+@keyframes sgFall{0%{opacity:0;transform:translateY(0) rotate(0)}
+  8%{opacity:.85}80%{opacity:.7}100%{opacity:0;transform:translateY(430px) rotate(320deg)} }
+
+/* the drum AND the harmonium, plus both players hands */
+.sg-hit{position:absolute;left:1.2%;top:50.5%;width:30%;height:13.5%;z-index:6;cursor:pointer}
+
+.dholpulse .sg-warm{animation:sgHit .9s ease-out}
+@keyframes sgHit{0%{opacity:1}30%{opacity:.95}100%{opacity:.5} }
+.dholpulse .sg-bulb i{animation:sgFlare .9s ease-out}
+@keyframes sgFlare{0%{opacity:1;transform:scale(1.55)}100%{opacity:.7;transform:scale(1)} }
+/* the garlands swing on their own hanging point and settle, rather than hop */
+.dholpulse .sg-canopy i{animation:sgSwing 1.5s cubic-bezier(.25,.85,.35,1)}
+@keyframes sgSwing{0%{transform:rotate(0) translateY(0)}
+  13%{transform:rotate(-1.7deg) translateY(-7px)}
+  32%{transform:rotate(1.3deg) translateY(3px)}
+  52%{transform:rotate(-.85deg) translateY(-3px)}
+  71%{transform:rotate(.5deg) translateY(1px)}
+  87%{transform:rotate(-.22deg) translateY(0)}
+  100%{transform:rotate(0) translateY(0)} }
+
+/* the shower. Idle these are invisible and unanimated; the whole thing only
+   exists while .dholpulse is on the stage. */
+.sgburst{position:absolute;left:0;right:0;top:0;height:74%;overflow:hidden;pointer-events:none}
+.sgburst i{position:absolute;top:-8%;border-radius:60% 40% 55% 45%;opacity:0}
+.dholpulse .sgburst i{animation:sgShower 1.5s cubic-bezier(.32,.5,.62,1) both}
+@keyframes sgShower{0%{opacity:0;transform:translateY(0) rotate(0) scale(.75)}
+  9%{opacity:1}82%{opacity:.9}
+  100%{opacity:0;transform:translateY(660px) rotate(430deg) scale(1.15)} }
+
+/* a warm bloom out of the drum, bright enough to actually see */
+.sgflash{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(62% 42% at 11% 58%,rgba(255,212,140,.95),rgba(255,172,72,.24) 46%,rgba(255,164,60,0) 100%)}
+.dholpulse .sgflash{animation:sgBloom 1.25s ease-out}
+@keyframes sgBloom{0%{opacity:0}11%{opacity:.9}100%{opacity:0} }
+/* the instruments breathe warm light so the eye finds them */
+.sg-glow{position:absolute;left:-1%;top:47.5%;width:35%;height:19.5%;z-index:5;pointer-events:none;
+  mix-blend-mode:screen;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,226,140,.95),rgba(255,188,76,.34) 50%,rgba(255,170,50,0) 78%);
+  animation:sgGlow 3.2s ease-in-out infinite}
+@keyframes sgGlow{0%,100%{opacity:.62;transform:scale(.94)}50%{opacity:1;transform:scale(1.09)}}
+/* a ripple of light off the drum - the part that actually says "touch me" */
+.sg-pulse{position:absolute;left:16%;top:57.5%;width:27%;aspect-ratio:1;z-index:5;pointer-events:none;
+  border-radius:50%;border:2px solid rgba(255,230,160,.9);mix-blend-mode:screen;
+  animation:sgPulse 2.8s cubic-bezier(.2,.6,.4,1) infinite}
+@keyframes sgPulse{0%{transform:translate(-50%,-50%) scale(.5);opacity:0}
+  16%{opacity:.95}100%{transform:translate(-50%,-50%) scale(1.55);opacity:0}}
+.sghint{position:absolute;left:25%;top:51.2%;transform:translateX(-50%);z-index:8;white-space:nowrap;
+  background:rgba(247,238,220,.94);border:1px solid #B8895A;padding:3px 8px 4px;border-radius:2px;
+  font:700 7px/1 Philosopher,serif;letter-spacing:.12em;color:#6E1414;pointer-events:none;
+  animation:cueBob 2.6s ease-in-out infinite}
+.dholused .sghint,.dholused .sg-glow,.dholused .sg-pulse{animation:none!important;opacity:0;transition:opacity .5s ease}
+.sg-ring{position:absolute;left:9.5%;top:57.5%;width:12%;aspect-ratio:1;border-radius:50%;
+  border:3px solid rgba(255,226,160,.95);transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none}
+.dholpulse .sg-ring{animation:sgRing 1.15s ease-out}
+@keyframes sgRing{0%{opacity:.9;transform:translate(-50%,-50%) scale(.2)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.6)} }
+
+/* Scroll-driven assemble. Base CSS above is the FINAL state, so a browser
+   without animation-timeline simply shows the scene already assembled. */
+@supports (animation-timeline: view()){
+  .sg-canopy{animation-name:sgDrop;animation-duration:auto;animation-timing-function:linear;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 4% entry 46%}
+  @keyframes sgDrop{from{transform:translateY(-108%)}to{transform:translateY(0)} }
+
+  .sg-empty{animation-name:sgFill;animation-duration:auto;animation-timing-function:linear;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 52% entry 99%}
+  @keyframes sgFill{from{opacity:1}to{opacity:0} }
+
+  .sg-bulb{animation-name:sgOn;animation-duration:auto;animation-timing-function:steps(1,end);
+    animation-fill-mode:both;animation-timeline:--sv}
+  @keyframes sgOn{from{opacity:0}to{opacity:1} }
+
+  .scene .evcard{animation-name:sgRise;animation-duration:auto;animation-timing-function:linear;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 55% entry 96%}
+  @keyframes sgRise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)} }
+}
+/* ---------- KANS TRANSITION : night into day ---------- */
+/* ---------- HALDI ---------- */
+.hl-leaf{position:absolute;top:17.63%;width:16.17%;height:8.15%;transform-origin:50% 100%}
+.hl-leaf img{width:100%;height:100%;display:block}
+.hl-L{left:0;animation:hlSwayL 6.5s ease-in-out infinite}
+.hl-R{left:83.83%;animation:hlSwayR 7.8s ease-in-out infinite}
+@keyframes hlSwayL{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.1deg)} }
+@keyframes hlSwayR{0%,100%{transform:rotate(1.3deg)}50%{transform:rotate(-1.2deg)} }
+
+.hl-bloom{position:absolute;inset:0;pointer-events:none;background:#FFFAEC;opacity:0;mix-blend-mode:screen}
+
+.motes{position:absolute;left:14%;right:14%;top:34%;height:32%;overflow:hidden;pointer-events:none}
+.motes i{position:absolute;bottom:-6%;width:5px;height:5px;border-radius:50%;
+  background:#F5C13A;opacity:0;animation:hlRise linear infinite}
+@keyframes hlRise{0%{opacity:0;transform:translateY(0) translateX(0)}
+  12%{opacity:.85}70%{opacity:.6}
+  100%{opacity:0;transform:translateY(-300px) translateX(18px)} }
+
+@supports (animation-timeline: view()){
+  .hl-bloom{animation-name:hlFlash;animation-duration:auto;animation-timing-function:ease-out;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 28% entry 94%}
+  @keyframes hlFlash{from{opacity:.92}to{opacity:0} }
+  .hl-scene>img.bg{animation-name:hlSettle;animation-duration:auto;animation-timing-function:ease-out;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 28% exit 6%}
+  @keyframes hlSettle{from{transform:scale(1.035)}to{transform:scale(1)} }
+}
+
+/* ---------- WEDDING ---------- */
+.wd-dim{position:absolute;inset:0;pointer-events:none;background:#0B0714;opacity:0;mix-blend-mode:multiply}
+.wd-flame{position:absolute;left:46.19%;top:53.3%;width:9.24%;height:4.63%;
+  transform-origin:50% 100%;animation:wdFlame 1.15s ease-in-out infinite}
+.wd-flame img{width:100%;height:100%;display:block}
+@keyframes wdFlame{0%,100%{transform:scaleY(1) scaleX(1) skewX(0)}
+  25%{transform:scaleY(1.13) scaleX(.93) skewX(2.5deg)}
+  50%{transform:scaleY(.95) scaleX(1.05) skewX(-1.5deg)}
+  75%{transform:scaleY(1.08) scaleX(.97) skewX(1.5deg)} }
+.wd-firelight{position:absolute;left:50.5%;top:56%;width:44%;aspect-ratio:1;
+  transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,190,90,.55),rgba(255,140,40,.16) 45%,rgba(255,120,20,0) 100%);
+  animation:wdBreath 1.15s ease-in-out infinite}
+@keyframes wdBreath{0%,100%{opacity:.75;transform:translate(-50%,-50%) scale(1)}
+  40%{opacity:1;transform:translate(-50%,-50%) scale(1.07)} }
+.wd-lamp{position:absolute;width:14%;aspect-ratio:1;transform:translate(-50%,-50%);
+  pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,215,130,.8),rgba(255,170,60,.25) 45%,rgba(255,160,40,0) 100%);
+  animation:wdLamp 2.3s ease-in-out infinite}
+@keyframes wdLamp{0%,100%{opacity:.7}35%{opacity:1}62%{opacity:.62} }
+
+.sparks{position:absolute;left:38%;width:24%;top:42%;height:16%;overflow:hidden;pointer-events:none}
+.sparks i{position:absolute;bottom:0;width:3px;height:3px;border-radius:50%;
+  background:#FFD27A;opacity:0;animation:wdSpark linear infinite}
+@keyframes wdSpark{0%{opacity:0;transform:translateY(0)}
+  15%{opacity:.95}100%{opacity:0;transform:translateY(-130px) translateX(9px)} }
+
+.wd-rings{position:absolute;left:50.5%;top:60.5%;width:74%;aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(0);pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,244,216,0) 46%,rgba(255,244,216,.5) 60%,
+    rgba(255,244,216,0) 72%,rgba(255,244,216,.35) 84%,rgba(255,244,216,0) 96%)}
+
+/* ---------- SHUBHO DRISHTI ---------- */
+.paan{position:absolute;left:33.5%;top:32.5%;width:34.1%;height:21.8%;z-index:7;cursor:pointer}
+.paan span{position:absolute;top:0;height:100%;width:50%;display:block}
+.paan img{width:100%;height:100%;display:block}
+.paan .pl{left:0;transform-origin:79% 100%}
+.paan .pr{left:50%;transform-origin:21% 100%}
+.paan .pl{transform:rotate(-58deg) translateY(14%);opacity:0}
+.paan .pr{transform:rotate(58deg) translateY(14%);opacity:0}
+.paanhint{position:absolute;left:50%;top:55.5%;transform:translateX(-50%);z-index:8;white-space:nowrap;
+  background:rgba(247,238,220,.94);border:1px solid #B8895A;padding:4px 11px 5px;border-radius:2px;
+  font:700 8px/1 Philosopher,serif;letter-spacing:.2em;color:#6E1414;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);animation:cueBob 2.6s ease-in-out infinite;pointer-events:none}
+
+@supports (animation-timeline: view()){
+  .wd-dim{animation-name:wdLight;animation-duration:auto;animation-timing-function:ease-out;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 18% entry 88%}
+  @keyframes wdLight{from{opacity:.82}to{opacity:0} }
+  .wd-rings{animation-name:wdDraw;animation-duration:auto;animation-timing-function:cubic-bezier(.2,.7,.3,1);
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 62% exit 8%}
+  @keyframes wdDraw{from{transform:translate(-50%,-50%) scale(.05);opacity:1}
+    to{transform:translate(-50%,-50%) scale(1.25);opacity:0} }
+  .paan .pl{animation-name:wdOpenL;animation-duration:auto;animation-timing-function:cubic-bezier(.4,0,.3,1);
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 80% exit 22%}
+  .paan .pr{animation-name:wdOpenR;animation-duration:auto;animation-timing-function:cubic-bezier(.4,0,.3,1);
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 80% exit 22%}
+  @keyframes wdOpenL{from{transform:rotate(0) translateY(0);opacity:1}
+    to{transform:rotate(-58deg) translateY(14%);opacity:0} }
+  @keyframes wdOpenR{from{transform:rotate(0) translateY(0);opacity:1}
+    to{transform:rotate(58deg) translateY(14%);opacity:0} }
+  .paanhint{animation:cueBob 2.6s ease-in-out infinite, wdHintOut 1ms linear both;
+    animation-timeline:auto,--sv;animation-range:normal,entry 80% entry 96%}
+  @keyframes wdHintOut{to{opacity:0} }
+}
+.paanopen .paan .pl{animation:none!important;transform:rotate(-58deg) translateY(14%);opacity:0;
+  transition:transform 1s cubic-bezier(.4,0,.3,1),opacity 1s}
+.paanopen .paan .pr{animation:none!important;transform:rotate(58deg) translateY(14%);opacity:0;
+  transition:transform 1s cubic-bezier(.4,0,.3,1),opacity 1s}
+.paanopen .paanhint{animation:none!important;opacity:0;transition:opacity .4s}
+
+/* ---------- VIDAAYI ---------- */
+.vd-scene{aspect-ratio:773/1721}
+.vd-gar{position:absolute;left:0;top:32.54%;width:100%;height:32.54%;
+  transform-origin:50% 0;animation:vdSway 8.5s ease-in-out infinite}
+.vd-gar img{width:100%;height:100%;display:block}
+@keyframes vdSway{0%,100%{transform:translateY(0) skewX(-.35deg)}
+  50%{transform:translateY(2.5px) skewX(.35deg)} }
+
+.vd-doorglow{position:absolute;left:50.2%;top:64%;width:42%;height:20%;
+  transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,196,110,.4),rgba(255,160,60,.12) 55%,rgba(255,150,40,0) 100%);
+  animation:vdGlow 5.5s ease-in-out infinite}
+@keyframes vdGlow{0%,100%{opacity:.6}50%{opacity:.95} }
+
+.vd-dawn{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:0;
+  background:linear-gradient(#FFD98A 0%,#FFB963 38%,rgba(255,150,60,0) 78%)}
+
+.rice{position:absolute;left:28%;right:28%;top:62%;height:24%;overflow:hidden;pointer-events:none}
+.rice i{position:absolute;top:-6%;width:4px;height:6px;border-radius:50%;
+  background:#FBF3DF;opacity:0;animation:vdRice linear infinite}
+@keyframes vdRice{0%{opacity:0;transform:translateY(0) rotate(0)}
+  10%{opacity:.95}75%{opacity:.8}100%{opacity:0;transform:translateY(210px) rotate(180deg)} }
+
+.vd-pata{position:relative;background:#F2E8D5;padding:64px 36px 60px;color:#3A170F;text-align:center}
+.vd-pata i.seam{position:absolute;left:0;right:0;top:-46px;height:46px;pointer-events:none;
+  background:linear-gradient(rgba(242,232,213,0),#F2E8D5)}
+.vd-pata::before{content:"";position:absolute;inset:32px;border:1px solid #C79A6A;pointer-events:none}
+.vd-pata::after{content:"";position:absolute;inset:36px;border:1px solid rgba(142,91,51,.35);pointer-events:none}
+.vd-pata h3{font:600 30px/1.05 'Cormorant Garamond',serif;margin:10px 0 12px;color:#6E1414}
+.vd-pata .t{font:700 12px/1.6 Philosopher,serif;letter-spacing:.06em}
+.vd-pata .v{font:400 10.5px/1.6 Philosopher,serif;color:#6B4A32;margin-top:9px}
+.vd-pata a{font:400 9px/1 Philosopher,serif;letter-spacing:.2em;color:#8E1B14;
+  text-decoration:none}
+
+@supports (animation-timeline: view()){
+  .vd-dawn{animation-name:vdWarm;animation-duration:auto;animation-timing-function:ease-out;
+    animation-fill-mode:both;animation-timeline:--sv;animation-range:entry 25% exit 10%}
+  @keyframes vdWarm{from{opacity:.85}to{opacity:.12} }
+}
+
+.tail{height:160px;background:linear-gradient(#E9DCC2,#D8C6A4)}
+/* ============ STAGE 4 : COURTYARD ============ */
+.arcLabel{position:absolute;text-align:center;color:#F2E8D5;line-height:1.25}
+.arcLabel b{display:block;font:600 12.5px/1.1 'Cormorant Garamond',serif;letter-spacing:.04em}
+.arcLabel i{display:block;font:400 6.5px/1 Philosopher,serif;letter-spacing:.18em;
+  font-style:normal;color:rgba(242,232,213,.66);margin-top:4px}
+.a1{left:6%;width:17.78%}.a2{left:27.83%;width:20.09%}
+.a3{left:51.85%;width:20.32%}.a4{left:76.1%;width:17.9%}
+.arcLabel{top:44.5%}
+
+/* ============ STAGE 4 : FOUR ARCH PANELS ============ */
+.ev{position:relative;padding:40px 0 46px;display:flex;justify-content:center}
+.ev-1{background:#232847}.ev-2{background:#8C5E14}
+.ev-3{background:#6E1414}.ev-4{background:#B9A582}
+.evarch{position:relative;width:74%;max-width:306px}
+.evarch>img{width:100%;display:block}
+.evtxt{position:absolute;left:13.98%;top:25.16%;width:71.72%;height:74.77%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;color:#3A170F;padding:0 6px}
+.evtxt .k{font:400 7.5px/1 Philosopher,serif;letter-spacing:.34em;color:#9A4A22}
+.evtxt h3{font:600 24px/1.05 'Cormorant Garamond',serif;margin:8px 0 10px;color:#6E1414}
+.evtxt .t{font:700 11px/1.5 Philosopher,serif;letter-spacing:.06em;color:#3A170F}
+.evtxt .v{font:400 10px/1.5 Philosopher,serif;color:#6B4A32;margin-top:9px}
+.evtxt .mrule{width:34px;height:1px;background:#C79A6A;margin:11px auto 9px}
+.evtxt a{font:400 9px/1 Philosopher,serif;letter-spacing:.2em;color:#8E1B14;
+  border-bottom:1px solid rgba(142,27,20,.45);padding-bottom:2px;text-decoration:none}
+.evtxt .x{font:400 8.5px/1.5 Philosopher,serif;color:#8A6A50;margin-top:10px;font-style:italic}
+
+/* ============ KEEPER CARD ============ */
+.keep{background:#E9DCC2;padding:40px 26px 46px;text-align:center}
+.keepcard{background:#F7EEDC;border:1px solid #C79A6A;box-shadow:0 8px 22px rgba(60,30,15,.22);
+  padding:22px 16px 20px}
+.keepcard .k{font:400 8px/1 Philosopher,serif;letter-spacing:.34em;color:#9A4A22}
+.keepcard .nm{font:600 19px/1.15 'Cormorant Garamond',serif;margin:7px 0 14px;color:#3A170F}
+.krow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+  padding:9px 2px;border-top:1px solid rgba(199,154,106,.5);text-align:left}
+.krow:first-of-type{border-top:0}
+.krow em{flex:0 0 74px;font:600 12.5px/1.2 'Cormorant Garamond',serif;font-style:normal;color:#6E1414}
+.krow span{flex:1;font:400 9px/1.45 Philosopher,serif;color:#4A2A18}
+.keep .note{margin-top:16px}
+
+
+
+
+/* ---------- THE THREAD ----------
+   A garland string down the left edge: a bead per event, filling as you go.
+   Decorative - the event cards say which event you are in; this says where
+   you are in the whole thing and how much is left. */
+.tspark{position:absolute;left:50%;top:-5%;width:15px;height:34px;transform:translateX(-50%);
+  pointer-events:none;opacity:0;border-radius:50%;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,228,152,.95),rgba(255,190,90,0) 74%)}
+/* fires once, the first time the thread appears, so the eye is pulled downward */
+.thread.firstshow .tspark{animation:tSpark 1.7s cubic-bezier(.4,0,.5,1) .25s 1 both}
+@keyframes tSpark{0%{opacity:0;top:-5%}14%{opacity:1}86%{opacity:1}100%{opacity:0;top:100%}}
+.thread{position:absolute;left:30px;top:20%;bottom:20%;width:11px;z-index:18;
+  pointer-events:none;opacity:0;transition:opacity .55s ease}
+.thread.show{opacity:1}
+.thread .thrk{position:absolute;left:5px;top:0;bottom:0;width:1px;
+  background:rgba(242,232,213,.26)}
+.thread .tfil{position:absolute;left:5px;top:0;width:1px;height:0;
+  background:linear-gradient(rgba(232,163,61,.5),#E8A33D);
+  box-shadow:0 0 7px rgba(232,163,61,.75)}
+.thread .tbead{position:absolute;left:0;width:11px;height:11px;border-radius:50%;
+  transform:translateY(-50%);background:#4A3320;border:1px solid rgba(242,232,213,.3);
+  transition:background .45s ease,box-shadow .45s ease,border-color .45s ease}
+.thread .tbead.on{background:#F08A24;border-color:rgba(255,214,140,.9);
+  box-shadow:0 0 9px rgba(240,138,36,.95)}
+
+/* ================= RSVP / FAQ / CONTACT ================= */
+.rsvp{position:relative;background:#F2E8D5;padding:56px 44px 60px;color:#3A170F;text-align:center}
+.rsvp::before{content:"";position:absolute;inset:24px;border:1px solid #C79A6A;pointer-events:none}
+.rsvp::after{content:"";position:absolute;inset:28px;border:1px solid rgba(142,91,51,.35);pointer-events:none}
+.rsvp .inner{position:relative;z-index:1}
+.fset{text-align:left;margin:0 0 16px}
+.flab{display:block;font:400 8.5px/1 Philosopher,serif;letter-spacing:.3em;
+  color:#9A4A22;margin:0 0 7px;text-transform:uppercase}
+.fin{display:block;width:100%;background:#FBF5E8;border:1px solid #C79A6A;border-radius:2px;
+  padding:10px 11px;font:400 13px/1.3 Philosopher,serif;color:#3A170F;-webkit-appearance:none}
+.fin:focus{outline:none;border-color:#8E1B14;box-shadow:0 0 0 2px rgba(142,27,20,.14)}
+textarea.fin{min-height:66px;resize:vertical}
+.opt{display:flex;gap:8px}
+.opt label{flex:1;position:relative;display:block}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.opt span{display:block;text-align:center;background:#FBF5E8;border:1px solid #C79A6A;border-radius:2px;
+  padding:10px 6px;font:400 11.5px/1.2 Philosopher,serif;letter-spacing:.06em;color:#6E3418;cursor:pointer}
+.opt input:checked + span{background:#6E1414;border-color:#6E1414;color:#F7EEDC}
+.opt input:focus-visible + span{box-shadow:0 0 0 2px rgba(142,27,20,.32)}
+/* the checkbox rows. Named .evrow, not .ev, because .ev-1..4 (the arch panels)
+   already owned .ev and the two rules were overwriting each other. */
+.evrow{display:flex;align-items:flex-start;gap:10px;padding:10px 2px;
+  border-top:1px solid rgba(199,154,106,.5);cursor:pointer}
+.evrow:first-of-type{border-top:0}
+.evrow input{position:absolute;opacity:0;width:0;height:0}
+.evrow i.box{flex:0 0 16px;width:16px;height:16px;margin-top:2px;background:#FBF5E8;
+  border:1px solid #C79A6A;border-radius:2px;position:relative}
+.evrow input:checked ~ i.box{background:#6E1414;border-color:#6E1414}
+.evrow input:checked ~ i.box:after{content:"";position:absolute;left:4.5px;top:1px;width:4px;height:9px;
+  border:solid #F7EEDC;border-width:0 1.5px 1.5px 0;transform:rotate(42deg)}
+.evrow input:focus-visible ~ i.box{box-shadow:0 0 0 2px rgba(142,27,20,.32)}
+.evrow span.d{flex:1}
+.evrow b{display:block;font:600 13px/1.2 'Cormorant Garamond',serif;color:#6E1414}
+.evrow s{display:block;text-decoration:none;font:400 9px/1.45 Philosopher,serif;color:#4A2A18;margin-top:2px}
+
+/* the small italic note under a field */
+.fnote{display:block;font:italic 400 9.5px/1.5 'Cormorant Garamond',serif;
+  color:#8E5B33;margin:6px 0 0}
+/* the three logistics questions, which fold away for a guest who cannot come */
+.rlog{overflow:hidden;max-height:1600px;opacity:1;
+  transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+.nocome .rlog{max-height:0;opacity:0}
+/* a native date field has to sit at the same height as the text fields */
+input[type=date].fin{min-height:41px;line-height:1.3}
+textarea.fin::placeholder,input.fin::placeholder{color:#B09070}
+.send{display:block;width:100%;margin-top:4px;background:#6E1414;color:#F7EEDC;border:1px solid #6E1414;
+  border-radius:2px;padding:13px 0 12px;cursor:pointer;
+  font:400 11px/1 Philosopher,serif;letter-spacing:.28em}
+.send:hover{background:#8E1B14}
+.thanks{display:none}
+.sent form.form{display:none}
+.sent .thanks{display:block}
+.miss{display:none;font:400 9.5px/1.5 Philosopher,serif;letter-spacing:.1em;
+  color:#8E1B14;margin:0 0 12px}
+.shownote .miss{display:block}
+.hold{font:400 8px/1.6 Philosopher,serif;letter-spacing:.18em;color:#A8683E;margin-top:18px}
+
+.faq{background:#E9DCC2;padding:52px 26px 56px;color:#3A170F;text-align:center}
+.faq .q{text-align:left;background:#F7EEDC;border:1px solid #C79A6A;margin-top:8px}
+.faq .q summary{list-style:none;cursor:pointer;padding:12px 34px 12px 14px;position:relative;
+  font:600 13px/1.35 'Cormorant Garamond',serif;color:#6E1414}
+.faq .q summary::-webkit-details-marker{display:none}
+.faq .q summary:after{content:"+";position:absolute;right:13px;top:10px;
+  font:400 16px/1 Philosopher,serif;color:#9A4A22}
+.faq .q[open] summary:after{content:"\2013"}
+.faq .q p{margin:0;padding:0 14px 14px;font:400 10.5px/1.7 Philosopher,serif;color:#4A2A18}
+
+.cts{background:#F2E8D5;padding:52px 26px 62px;color:#3A170F;text-align:center}
+.ct{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;
+  background:#F7EEDC;border:1px solid #C79A6A;padding:12px 14px;margin-top:8px}
+.ct span.d{flex:1}
+.ct b{display:block;font:600 14px/1.2 'Cormorant Garamond',serif;color:#3A170F}
+.ct s{display:block;text-decoration:none;font:400 8px/1 Philosopher,serif;letter-spacing:.26em;
+  color:#9A4A22;margin-top:4px}
+.ct a{flex:0 0 auto;text-decoration:none;background:#6E1414;color:#F7EEDC;border-radius:2px;
+  padding:9px 13px;font:400 9.5px/1 Philosopher,serif;letter-spacing:.16em;cursor:pointer;
+  white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.ct a:active{transform:scale(.97)}
+.ct a.copied{background:#3F6B3A}
+
+/* ================= THE LANDING ================= */
+.world{position:absolute;inset:0;z-index:2;transform-origin:50% 67.77%}
+.hs{position:absolute;left:0;top:0;width:100%}
+.hs img{width:100%;height:100%;display:block}
+
+/* --- the house and its doors --- */
+.doorway{position:absolute;left:35.409%;top:56.198%;width:29.181%;height:23.14%;z-index:3;perspective:800px}
+.leaf{position:absolute;top:0;height:100%;backface-visibility:hidden}
+.leaf img{position:static;width:100%;height:100%}
+.lf{left:0;width:50.2%;transform-origin:left center}
+.rf{right:0;width:49.8%;transform-origin:right center}
+.glow{position:absolute;left:35.409%;top:56.198%;width:29.181%;height:23.14%;z-index:2;opacity:0;
+  background:radial-gradient(75% 60% at 50% 62%,#FFD489 0%,#E8963B 38%,rgba(150,60,20,0) 78%)}
+.thud{position:absolute;left:35.409%;top:56.198%;width:29.181%;height:23.14%;z-index:4;background:#1B0C08;opacity:0}
+.brass{position:absolute;left:45.213%;top:62.259%;width:9.458%;height:6.061%;z-index:12;
+  pointer-events:none;filter:brightness(1.32) saturate(1.12)}
+.brass img{width:100%;height:100%;display:block}
+.ring{position:absolute;left:46.136%;top:68.099%;width:7.612%;height:3.581%;z-index:12;
+  pointer-events:none;transform-origin:50% 2%;filter:brightness(1.32) saturate(1.12)}
+.ring img{position:static;width:100%;height:100%}
+/* the brass stays gold while the house sleeps, and breathes so it can be found */
+.brassglow{position:absolute;left:42%;top:60.5%;width:16%;height:10.5%;z-index:12;
+  pointer-events:none;mix-blend-mode:screen;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,206,110,.46),rgba(255,170,70,.12) 52%,rgba(255,160,50,0) 78%);
+  animation:brassBreathe 3.4s ease-in-out infinite}
+@keyframes brassBreathe{0%,100%{opacity:.5;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
+.knockzone{position:absolute;left:40%;top:59.5%;width:20%;height:12.5%;z-index:17;cursor:pointer}
+.hint{position:absolute;left:46.136%;top:67.989%;width:7.612%;height:3.747%;z-index:4;border-radius:50%;
+  animation:hintPulse 4s ease-out infinite}
+@keyframes hintPulse{0%,70%{box-shadow:0 0 0 0 rgba(255,214,140,.5)}
+  85%{box-shadow:0 0 0 14px rgba(255,214,140,0)}100%{box-shadow:0 0 0 0 rgba(255,214,140,0)}}
+
+/* =========== ONE WIND ===========
+   Every plant answers the same 9s gust at its own strength and a small delay,
+   so it reads as one gust crossing the house rather than four separate wobbles. */
+.swag{position:absolute;z-index:6;transform-origin:50% 0}
+.swag i{display:block;transform-origin:50% 0;animation:gSwag 9s ease-in-out infinite}
+.drop{position:absolute;z-index:6;transform-origin:50% 1%;animation:gDrop 9s ease-in-out infinite}
+.ban {position:absolute;z-index:8;transform-origin:50% 96%;animation:gBan  9s ease-in-out infinite}
+.kgrass{position:absolute;z-index:8;transform-origin:50% 100%;animation:gKans 9s ease-in-out infinite}
+.swag img,.drop img,.ban img,.kgrass img{width:100%;height:100%;display:block}
+
+/* a strung garland doesn't rotate - it sags. The middle drops and lifts while
+   the ends stay pinned, so scaleY from the top is the honest transform. */
+@keyframes gSwag{0%,100%{transform:scaleY(1) skewX(0) translateY(0)}
+  16%{transform:scaleY(1.13) skewX(-2.2deg) translateY(1px)}
+  30%{transform:scaleY(.95) skewX(1.4deg) translateY(0)}
+  46%{transform:scaleY(1.08) skewX(-1.4deg) translateY(1px)}
+  64%{transform:scaleY(.98) skewX(.8deg) translateY(0)}
+  80%{transform:scaleY(1.04) skewX(-.6deg) translateY(0)}}
+@keyframes gDrop{0%,100%{transform:rotate(-3deg)}
+  16%{transform:rotate(9.5deg)}30%{transform:rotate(-6deg)}
+  46%{transform:rotate(7deg)}64%{transform:rotate(-4deg)}80%{transform:rotate(4.5deg)}}
+@keyframes gBan{0%,100%{transform:rotate(-2deg) skewX(.6deg)}
+  16%{transform:rotate(5.5deg) skewX(-1.6deg)}30%{transform:rotate(-3deg) skewX(1deg)}
+  46%{transform:rotate(4deg) skewX(-1deg)}64%{transform:rotate(-2.4deg) skewX(.7deg)}}
+@keyframes gKans{0%,100%{transform:rotate(-3deg) skewX(1.2deg)}
+  16%{transform:rotate(11deg) skewX(-4.5deg)}30%{transform:rotate(-5deg) skewX(2deg)}
+  46%{transform:rotate(8deg) skewX(-3deg)}64%{transform:rotate(-3.5deg) skewX(1.4deg)}}
+
+/* the overhead wires shiver when the gust crosses */
+.wire{position:absolute;left:0;top:0;width:100%;height:10.193%;z-index:6;pointer-events:none;
+  transform-origin:0 50%;animation:gWire 9s ease-in-out infinite}
+.wire img{width:100%;height:100%;display:block}
+@keyframes gWire{0%,100%{transform:translateY(0) skewY(0)}
+  14%{transform:translateY(-1.6px) skewY(.14deg)}
+  24%{transform:translateY(1.4px) skewY(-.12deg)}
+  38%{transform:translateY(-.9px) skewY(.08deg)}
+  52%{transform:translateY(.7px) skewY(-.06deg)}
+  70%{transform:translateY(-.4px) skewY(.03deg)}}
+
+/* the knocker keeps a faint brass glint so it can be found in the dark */
+.glint{position:absolute;left:46.136%;top:67.989%;width:7.612%;height:3.747%;z-index:6;
+  pointer-events:none;mix-blend-mode:screen;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,230,160,.95),rgba(255,195,95,.25) 55%,rgba(255,185,80,0) 78%);
+  animation:glint 3.2s ease-in-out infinite}
+@keyframes glint{0%,100%{opacity:.55;transform:scale(1)}
+  46%{opacity:1;transform:scale(1.18)}}
+
+/* leaves actually blown across, so you can see the air */
+.wind{position:absolute;inset:0;z-index:12;overflow:hidden;pointer-events:none}
+.wind i{position:absolute;width:11px;height:8px;border-radius:60% 40% 55% 45%;
+  background:#E8C88A;opacity:0;animation:blow linear infinite}
+@keyframes blow{0%{opacity:0;transform:translate(-40px,0) rotate(0) scale(.8)}
+  10%{opacity:.85}72%{opacity:.7}
+  100%{opacity:0;transform:translate(520px,120px) rotate(620deg) scale(1.1)}}
+
+/* --- the banner --- */
+.banner{position:absolute;left:6%;top:26%;width:88%;z-index:7;transform-origin:50% 3%;
+  animation:gBan 9s ease-in-out infinite}
+.banner>img{width:100%;display:block}
+.bantxt{position:absolute;left:0;top:0;width:100%;height:100%;z-index:9;opacity:0;
+  overflow:visible;pointer-events:none}
+.banglow{position:absolute;left:6%;top:40%;width:88%;height:40%;z-index:8;opacity:0;
+  pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(58% 62% at 50% 50%,rgba(255,222,150,.9),rgba(255,190,95,.3) 52%,rgba(255,180,70,0) 100%)}
+.bantxt .s{font:700 38px Philosopher,serif;letter-spacing:13px;fill:#8E4A1C}
+.bantxt .n{font:600 80px 'Cormorant Garamond',serif;fill:#5A1410}
+.bantxt .d{font:700 40px Philosopher,serif;letter-spacing:7px;fill:#8E1B14}
+
+/* --- the taxi --- */
+.taxi{position:absolute;left:-18%;top:82%;width:66%;z-index:9}
+.knocked .taxi{animation:ignite .5s ease-out 5s,idle .14s linear 5.5s infinite}
+@keyframes ignite{0%{transform:translateY(0)}12%{transform:translateY(-1.6px) rotate(-.18deg)}
+  30%{transform:translateY(1.4px) rotate(.14deg)}55%{transform:translateY(-.9px)}
+  78%{transform:translateY(.6px)}100%{transform:translateY(0)}}
+.tshadow{position:absolute;left:-14%;top:95.4%;width:56%;height:4.6%;z-index:8;pointer-events:none;
+  background:radial-gradient(50% 46% at 50% 50%,rgba(8,4,10,.7),rgba(8,4,10,.3) 52%,rgba(8,4,10,0) 100%)}
+/* a tighter, darker line right where rubber meets road */
+.tcontact{position:absolute;left:-9%;top:96.6%;width:46%;height:2%;z-index:8;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(6,3,8,.78),rgba(6,3,8,.3) 48%,rgba(6,3,8,0) 100%)}
+.taxi>img{width:100%;display:block}
+@keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(.7px)}}
+.beam{position:absolute;z-index:15;pointer-events:none;mix-blend-mode:screen;opacity:0}
+.lamp1,.lamp2{aspect-ratio:1;transform:translate(-50%,-50%);filter:blur(1.5px);
+  background:radial-gradient(closest-side,#FFFFFF 0%,#FFFFFF 26%,rgba(255,244,198,.9) 46%,
+    rgba(255,214,126,.42) 68%,rgba(255,200,90,0) 100%)}
+.lamp1{left:26.55%;top:90.8%;width:8.5%}
+.lamp2{left:44.6%;top:90.5%;width:7.5%}
+/* the thrown beam - soft edged, because light has no edges */
+.cone{left:45%;top:84%;width:54%;height:16%;filter:blur(7px);
+  background:radial-gradient(62% 130% at 0% 46%,rgba(255,234,176,.72),
+    rgba(255,206,112,.24) 44%,rgba(255,196,84,0) 100%)}
+/* and the pool it lays on the road in front of the wheels */
+.pool{left:41%;top:93.2%;width:48%;height:5.4%;filter:blur(5px);
+  background:radial-gradient(50% 50% at 50% 50%,rgba(255,222,146,.52),
+    rgba(255,202,104,.16) 54%,rgba(255,192,78,0) 100%)}
+
+/* --- the lights of the house --- */
+.lg{position:absolute;z-index:10;pointer-events:none;mix-blend-mode:screen;opacity:0;
+  background:radial-gradient(closest-side,rgba(255,222,150,.9),rgba(255,180,70,.28) 48%,rgba(255,170,50,0) 100%)}
+.st{left:22.5%;top:7.3%;width:30%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.w1{left:18.7%;top:30.4%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.w2{left:49.3%;top:30.4%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.w3{left:80.2%;top:30.4%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.w4{left:6.3%;top:64.7%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.w5{left:92%;top:64.7%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.wf{left:50.2%;top:53.2%;width:26%;aspect-ratio:1;transform:translate(-50%,-50%)}
+.flick{animation:lampFlick 2.4s ease-in-out infinite}
+@keyframes lampFlick{0%,100%{filter:brightness(1)}30%{filter:brightness(1.16)}
+  55%{filter:brightness(.9)}78%{filter:brightness(1.08)}}
+
+/* the house asleep */
+.spill{position:absolute;left:50%;top:74%;width:130%;height:46%;z-index:10;opacity:0;
+  transform:translateX(-50%);pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(46% 54% at 50% 22%,rgba(255,206,130,.75),rgba(255,170,80,.24) 46%,rgba(255,160,60,0) 100%)}
+.night{position:absolute;inset:0;z-index:11;pointer-events:none;background:#0A1030;
+  opacity:.52;mix-blend-mode:multiply}
+.chill{position:absolute;inset:0;z-index:11;pointer-events:none;background:#2A4A9E;
+  opacity:.2;mix-blend-mode:soft-light}
+
+
+/* --- overlaid type and the page frame --- */
+.type{position:absolute;inset:0;z-index:13;pointer-events:none}
+.plaque{position:absolute;left:50%;top:79.6%;transform:translateX(-50%);z-index:13;
+  background:rgba(247,238,220,.94);color:#6E1414;border:1px solid #B8895A;padding:5px 14px;border-radius:2px;
+  font:700 9.5px/1 Philosopher,serif;letter-spacing:.22em;box-shadow:0 4px 12px rgba(0,0,0,.4);white-space:nowrap}
+.foot{position:absolute;left:0;right:0;bottom:0;height:14%;z-index:14;pointer-events:none;
+  background:linear-gradient(rgba(36,17,16,0),rgba(36,17,16,.34) 50%,rgba(36,17,16,.7) 100%)}
+.fi{position:absolute;left:34px;right:34px;bottom:76px;text-align:center;z-index:15;
+  font:400 8px/1.5 Philosopher,serif;letter-spacing:.2em;color:rgba(242,232,213,.92);
+  text-shadow:0 1px 4px rgba(18,9,7,.95),0 0 12px rgba(18,9,7,.7)}
+.skip{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:16;cursor:pointer;
+  font:400 10.5px/1 Philosopher,serif;letter-spacing:.16em;color:#F2E8D5;
+  background:rgba(22,12,9,.62);border:1px solid rgba(242,232,213,.38);
+  border-radius:999px;padding:7px 16px 6px}
+.inside .foot,.inside .fi,.inside .skip{display:none}
+/* The sound control has to outlive the landing now that there is music.
+   !important because .knocked .snd sits further down this sheet at the same
+   specificity and pins it to opacity 0 with animation-fill-mode:forwards -
+   which is why the mute button was invisible (though still clickable) for the
+   whole journey. This says the intent instead of depending on source order. */
+.inside .snd{animation:none!important;opacity:1!important}
+/* over the bright study and the ivory letter it needs to separate from the art */
+.instudy .snd,.instory .snd{box-shadow:0 3px 12px rgba(0,0,0,.5)}
+.border{position:absolute;inset:0;z-index:20;pointer-events:none;width:100%}
+.snd{position:absolute;right:34px;top:18px;z-index:21;width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  background:rgba(20,12,8,.72);border:1px solid rgba(242,232,213,.7);color:#F2E8D5;
+  box-shadow:0 2px 10px rgba(0,0,0,.45);
+  font:400 15px/1 Philosopher,serif;letter-spacing:0;
+  -webkit-tap-highlight-color:transparent}
+.snd:active{transform:scale(.93)}
+.snd:after{content:"\266A"}
+.muted .snd{color:rgba(242,232,213,.4)}
+.muted .snd:before{content:"";position:absolute;left:6px;right:6px;top:50%;height:1.5px;
+  background:rgba(242,232,213,.75);transform:rotate(-34deg)}
+
+/* ============ KNOCK SEQUENCE =============
+   About 10.6s. The extra time over the old 5.4s is almost all HELD BEATS -
+   silence after the knock, a moment with only the lamp lit, the names left up
+   long enough to read, and a pause looking into the doorway before the camera
+   moves. Slow motion feels sluggish; held beats feel unhurried. */
+.knocked .brassglow{animation:brassOut 1s ease-out forwards}
+@keyframes brassOut{to{opacity:0}}
+.knocked .ring{animation:knock 1.3s cubic-bezier(.3,.7,.4,1) both,ringOut .3s linear 6.5s both}
+.knocked .brass{animation:ringOut .3s linear 6.5s both}
+@keyframes knock{
+  0%{transform:translateY(0) rotate(0) scaleY(1)}
+  5%{transform:translateY(-13px) rotate(-5deg) scaleY(.93)}
+  10.8%{transform:translateY(0) rotate(0) scaleY(1.05)}
+  16%{transform:translateY(-3px) rotate(1deg) scaleY(.99)}
+  25%{transform:translateY(-12px) rotate(4deg) scaleY(.93)}
+  38.7%{transform:translateY(0) rotate(0) scaleY(1.05)}
+  43%{transform:translateY(-3px) rotate(-1deg) scaleY(.99)}
+  49%{transform:translateY(-13px) rotate(-4.5deg) scaleY(.92)}
+  59.5%{transform:translateY(0) rotate(0) scaleY(1.05)}
+  64%{transform:translateY(-3px) rotate(1deg) scaleY(.99)}
+  70%{transform:translateY(-12px) rotate(4deg) scaleY(.93)}
+  81.5%{transform:translateY(0) rotate(0) scaleY(1.06)}
+  87%{transform:translateY(-3px) rotate(-.8deg) scaleY(.99)}
+  93%,100%{transform:translateY(0) rotate(0) scaleY(1)}}
+@keyframes ringOut{to{opacity:0}}
+.knocked .thud{animation:thud .74s linear both}
+@keyframes thud{0%,100%{opacity:0}7%{opacity:.22}17%{opacity:0}45%{opacity:.24}56%{opacity:0}}
+
+/* --- the house wakes, one thing at a time --- */
+.knocked .night{animation:wake 4.6s ease-out 1.3s forwards}
+.knocked .chill{animation:wake 4.6s ease-out 1.3s forwards}
+@keyframes wake{to{opacity:0}}
+.knocked .st{animation:lightUp .65s ease-out 1.3s forwards,lampFlick 2.4s ease-in-out 1.95s infinite}
+.knocked .w1{animation:lightUp .4s ease-out 2.4s forwards}
+.knocked .w2{animation:lightUp .4s ease-out 2.8s forwards}
+.knocked .w3{animation:lightUp .4s ease-out 3.2s forwards}
+.knocked .w4{animation:lightUp .4s ease-out 3.8s forwards}
+.knocked .w5{animation:lightUp .4s ease-out 4.2s forwards}
+.knocked .wf{animation:lightUp .5s ease-out 4.9s forwards}
+@keyframes lightUp{to{opacity:1}}
+
+/* --- the names arrive and are left up to be read --- */
+.knocked .bantxt{animation:nameIn 1.1s cubic-bezier(.3,0,.2,1) 4.2s forwards}
+@keyframes nameIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.knocked .banglow{animation:banBloom 2.6s ease-out 4.2s forwards}
+@keyframes banBloom{0%{opacity:0}26%{opacity:1}100%{opacity:.42}}
+
+/* --- the driver starts the engine --- */
+.knocked .cone{animation:lightUp .8s ease-out 5.2s forwards}
+.knocked .lamp1{animation:lampOn .5s ease-out 5.35s forwards}
+.knocked .lamp2{animation:lampOn .5s ease-out 5.42s forwards}
+.knocked .pool{animation:lightUp .7s ease-out 5.5s forwards}
+@keyframes lampOn{0%{opacity:0}18%{opacity:.85}30%{opacity:.25}48%{opacity:1}62%{opacity:.6}100%{opacity:1}}
+
+/* --- the doors, slowly --- */
+.knocked .lf{animation:swingL 1.6s cubic-bezier(.45,0,.2,1) 6.4s forwards}
+.knocked .rf{animation:swingR 1.6s cubic-bezier(.45,0,.2,1) 6.4s forwards}
+@keyframes swingL{to{transform:rotateY(-78deg);filter:brightness(.66)}}
+@keyframes swingR{to{transform:rotateY(78deg);filter:brightness(.72)}}
+.knocked .glow{animation:fadeIn 1.4s ease-out 6.4s forwards}
+@keyframes fadeIn{to{opacity:1}}
+/* and the light reaches out onto the steps, the plants and the car */
+.knocked .spill{animation:spillOut 1.8s ease-out 7.2s forwards}
+@keyframes spillOut{from{opacity:0}to{opacity:1}}
+
+/* --- a held breath, then through --- */
+.knocked .skip{animation:fadeOut .35s ease-in forwards;pointer-events:none}
+.knocked .plaque,.knocked .foot,.knocked .fi,.knocked .snd{
+  animation:fadeOut .8s ease-in 8.6s forwards}
+/* the banner keeps its wind THROUGH the fade - replacing the animation
+   outright is what made it snap flat the instant you knocked */
+.knocked .banner{animation:gBan 9s ease-in-out infinite,fadeOut .8s ease-in 8.6s forwards}
+@keyframes fadeOut{to{opacity:0}}
+.knocked .world{animation:push 1.8s cubic-bezier(.55,0,.75,1) 8.8s forwards}
+@keyframes push{0%{transform:scale(1);opacity:1}72%{opacity:1}100%{transform:scale(2.7);opacity:0}}
+.inside .world{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  .hint{animation:none}
+  .glow,.w1,.w2,.w3,.wf,.lamp,.alp{opacity:1}
+  .lf{transform:rotateY(-78deg);filter:brightness(.66)}
+  .rf{transform:rotateY(78deg);filter:brightness(.72)}
+  .ring{opacity:0}
+  .greet,.gshadow,.hglow,.dwarm,.dlab,.hwel{opacity:1}
+  .hnight{opacity:0}
+  .swag,.drop,.ban,.kgrass,.banner,.taxi,.wind i,.st,.wire{animation:none!important}
+  .night{opacity:0}.chill{opacity:0}
+  .lg,.beam,.bantxt,.banglow,.spill{opacity:1}
+  .glint{opacity:.6}
+  .scene,.scene *{animation:none!important}
+  .knocked *{animation:none!important}
+  .knocked .world{opacity:0;transition:opacity .3s}
+  .doc{scroll-behavior:auto}
+}
+.frozen *{animation-play-state:paused!important}
+
+/* ======================================================================
+   THE STUDY ROOM - a side trip, not a scroll section.
+   .instudy on the stage brings the room up over everything below the
+   floral border (z-20), so the border still frames it. .instory brings
+   the letter up over the room.
+   ====================================================================== */
+.study{position:absolute;inset:0;z-index:18;overflow:hidden;background:#2A1410;
+  opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s .5s}
+.instudy .study{opacity:1;visibility:visible;transition:opacity .5s ease,visibility 0s}
+.study img.stbg{position:absolute;left:0;top:0;width:100%;height:100%;
+  object-fit:cover;display:block;z-index:1}
+
+/* the brass desk lamp. The only light in the room, so it is the only thing
+   that breathes - the room is meant to be quiet. */
+.st-lamp{position:absolute;left:17%;top:41.8%;width:27%;height:9.6%;z-index:2;
+  pointer-events:none;mix-blend-mode:screen;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,214,130,.78),rgba(255,180,70,.22) 52%,rgba(255,168,50,0) 78%);
+  animation:stLamp 4.6s ease-in-out infinite}
+@keyframes stLamp{0%,100%{opacity:.6;transform:scale(.96)}50%{opacity:1;transform:scale(1.05)}}
+
+/* the sheet of paper, and the cue that it can be opened */
+/* the pool of light the page is sitting in - flat, because the desk is flat */
+.st-glow{position:absolute;left:29%;top:47.6%;width:38%;height:9.6%;z-index:3;
+  pointer-events:none;mix-blend-mode:screen;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,226,142,.95),rgba(255,192,80,.36) 48%,rgba(255,178,54,0) 80%);
+  animation:stGlow 3.2s ease-in-out infinite}
+@keyframes stGlow{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.12)}}
+/* the page itself, clipped to its perspective. A screen blend does nothing over
+   ivory, so this is a plain warm wash that fades in and out - the sheet reads as
+   catching the lamp rather than as a circle drawn on top of it. */
+.st-sheet{position:absolute;left:38.45%;top:49.94%;width:18.94%;height:4.74%;z-index:4;
+  pointer-events:none;animation:stSheet 3.2s ease-in-out infinite;
+  filter:drop-shadow(0 0 6px rgba(255,208,102,.95)) drop-shadow(0 0 15px rgba(255,180,58,.85))}
+/* the silhouette of the page, so the drop-shadow above haloes the paper and not
+   a rectangle. The fill is a shade brighter than the base artwork, so the sheet
+   lifts out of the desk as well as glowing at its edges. */
+.st-sheet i{display:block;width:100%;height:100%;
+  clip-path:polygon(13.4% 0,89.6% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,#FFF6DF,#FFE9BE)}
+@keyframes stSheet{0%,100%{opacity:.3}50%{opacity:1}}
+/* and a halo that opens outward from the page, the same cue the dholak uses,
+   but an ellipse so it follows the shape of a sheet of paper on a desk */
+.st-pulse{position:absolute;left:47.8%;top:52.3%;width:21%;height:5.6%;z-index:3;
+  pointer-events:none;border-radius:50%;border:1.5px solid rgba(255,228,152,.9);
+  mix-blend-mode:screen;animation:stRing 2.9s cubic-bezier(.2,.6,.4,1) infinite}
+@keyframes stRing{0%{transform:translate(-50%,-50%) scale(.92);opacity:0}
+  18%{opacity:.85}100%{transform:translate(-50%,-50%) scale(1.75);opacity:0}}
+.st-hit{position:absolute;left:34.5%;top:47.2%;width:27%;height:10%;z-index:6;cursor:pointer}
+.st-hint{position:absolute;left:48%;top:41.6%;transform:translateX(-50%);z-index:7;
+  white-space:nowrap;background:rgba(247,238,220,.95);border:1px solid #B8895A;
+  padding:3px 8px 4px;border-radius:2px;box-shadow:0 4px 12px rgba(0,0,0,.4);
+  font:700 7px/1 Philosopher,serif;letter-spacing:.12em;color:#6E1414;
+  pointer-events:none;animation:cueBob 2.6s ease-in-out infinite}
+/* once the letter has been opened the cue has done its job and stops nagging */
+.storyread .st-hint,.storyread .st-pulse,.storyread .st-sheet{animation:none!important;opacity:0;transition:opacity .5s ease}
+.storyread .st-glow{animation-duration:6s}
+
+/* the two ways out, one under each arch */
+.st-exit{position:absolute;bottom:6.2%;z-index:7;cursor:pointer;text-align:center;
+  background:rgba(247,238,220,.95);border:1px solid #B8895A;border-radius:2px;
+  padding:5px 4px 6px;box-shadow:0 4px 14px rgba(0,0,0,.45);
+  font:700 6.5px/1 Philosopher,serif;letter-spacing:.17em;color:#6E1414}
+.st-exit b{display:block;font-weight:400;font-size:8px;letter-spacing:.04em;
+  color:#8E5B33;margin-top:3px}
+.st-exit:active{transform:scale(.985)}
+.st-exitL{left:6%;width:35%}
+.st-exitR{right:6%;width:35%}
+
+/* ======================================================================
+   OUR STORY - one long ivory card, the same pata paper as the event cards.
+   ====================================================================== */
+.story{position:absolute;inset:0;z-index:19;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;background:rgba(24,11,9,.92);
+  opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s .4s}
+.instory .story{opacity:1;visibility:visible;transition:opacity .4s ease,visibility 0s}
+.st-card{position:relative;margin:6% 4.5% 8%;background:#F7EEDC;border:1px solid #C9A06A;
+  border-radius:3px;box-shadow:0 18px 50px rgba(0,0,0,.6);padding:34px 18px 28px;
+  background-image:radial-gradient(rgba(150,110,66,.055) 1px,transparent 1px);
+  background-size:3px 3px}
+/* The close control sits OUTSIDE the scroller. Inside it, pinned to the top of
+   the card, it scrolled off the screen the moment you read past the first
+   section - which is exactly what made the letter feel impossible to close.
+   Top LEFT, because the sound button owns the top right. */
+.st-x{position:absolute;left:12px;top:12px;width:38px;height:38px;border-radius:50%;z-index:21;
+  border:1px solid #B8895A;background:rgba(247,238,220,.96);color:#6E1414;cursor:pointer;
+  font:400 21px/34px Philosopher,serif;text-align:center;padding:0;
+  box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:0;visibility:hidden;
+  transition:opacity .3s ease,visibility 0s .3s;-webkit-tap-highlight-color:transparent}
+.instory .st-x{opacity:1;visibility:visible;transition:opacity .3s ease,visibility 0s}
+.st-x:active{transform:scale(.93)}
+
+/* the rail - the letter is long, and nothing else said so */
+.st-scroll{position:absolute;right:24px;top:15%;bottom:11%;width:11px;z-index:20;
+  pointer-events:none;opacity:0;transition:opacity .35s ease}
+.instory .st-scroll{opacity:1}
+.st-scroll b{position:absolute;left:5px;top:0;bottom:0;width:1px;background:rgba(142,91,51,.3)}
+.st-scroll i{position:absolute;left:1px;top:0;width:9px;height:34px;border-radius:5px;
+  background:linear-gradient(#C9A06A,#8E5B33);
+  box-shadow:0 1px 4px rgba(60,34,20,.35),0 0 0 1px rgba(247,238,220,.6)}
+/* until the first scroll the marker breathes downward, so it reads as "there is
+   more below". The JS sets transform on the same element, so the two would
+   fight - but at scrollTop 0 the JS transform is 0, and the class is dropped
+   the moment you scroll, which is the moment the JS has something to say. */
+.st-scroll.untouched i{animation:stRail 2.4s ease-in-out infinite}
+@keyframes stRail{0%,100%{transform:translateY(0)}45%{transform:translateY(13px)}}
+.st-eyebrow{font:700 7.5px/1 Philosopher,serif;letter-spacing:.34em;color:#8E4A1C;text-align:center}
+.st-title{font:600 27px/1.06 'Cormorant Garamond',serif;color:#5A1410;text-align:center;margin:9px 0 0}
+.st-rule{width:54px;height:1px;background:#C9A06A;margin:13px auto 0}
+
+.st-sec{margin-top:26px}
+.st-h{font:700 8px/1 Philosopher,serif;letter-spacing:.22em;color:#8E1B14;
+  text-align:center;margin:0 0 11px}
+.st-p{font:400 12.5px/1.74 'Cormorant Garamond',serif;color:#3B2417;margin:0}
+
+/* the night everything changed gets its own dateline */
+.st-sec.dated{margin-top:34px;padding:19px 0 6px;
+  border-top:1px solid #DDC49B;border-bottom:1px solid #DDC49B}
+.st-sec.dated .st-h{font:600 27px/1.08 'Cormorant Garamond',serif;letter-spacing:0;
+  color:#8E1B14;margin-bottom:3px}
+.st-sub{font:700 7px/1 Philosopher,serif;letter-spacing:.3em;color:#8E5B33;
+  text-align:center;margin:0 0 13px}
+
+/* the photographs drift past on their own. Touch or hover holds them still,
+   and the strip is a real scroller so you can push it along yourself. */
+.st-strip{margin:15px -18px 0;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.st-strip::-webkit-scrollbar{display:none}
+.st-rail{display:flex;gap:10px;padding:0 18px;width:max-content;
+  animation:stDrift 30s linear infinite}
+.st-strip:hover .st-rail,.st-strip:active .st-rail{animation-play-state:paused}
+/* the rail holds the set twice; -50% lands one full set along, and the extra
+   half-gap is what makes the loop seamless instead of jolting by 5px */
+@keyframes stDrift{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 5px))}}
+.st-ph{flex:0 0 auto;background:#FFFDF6;border:1px solid #E2CFA8;padding:5px 5px 5px;
+  box-shadow:0 5px 16px rgba(60,34,20,.32);transform:rotate(-1.1deg)}
+.st-ph:nth-child(even){transform:rotate(1.3deg)}
+.st-ph img{height:126px;width:auto;display:block}
+
+.st-end{margin-top:30px;text-align:center}
+.st-end .st-rule{margin:0 auto 13px}
+.st-end i{display:block;font:italic 400 14px/1.5 'Cormorant Garamond',serif;color:#6E1414}
+
+@media (prefers-reduced-motion:reduce){
+  .st-lamp,.st-glow,.st-pulse,.st-sheet,.st-hint,.st-rail{animation:none}
+  .st-scroll.untouched i{animation:none}
+  .st-pulse{opacity:0}
+}
+
+/* ===== the sign-in gate on the RSVP ===== */
+.gate{text-align:left}
+.gtext{font:400 11.5px/1.7 Philosopher,serif;color:#4A2A18;margin:0 0 16px}
+.gbtn{display:flex;justify-content:center;min-height:46px;margin-bottom:14px}
+.gwho{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:#FBF5E8;border:1px solid #C79A6A;border-radius:2px;padding:9px 11px;
+  margin:0 0 18px;text-align:left}
+.gwho span.d{flex:1;min-width:0}
+.gwho b{display:block;font:600 12.5px/1.2 'Cormorant Garamond',serif;color:#6E1414;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gwho s{display:block;text-decoration:none;font:400 9px/1.4 Philosopher,serif;
+  color:#4A2A18;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gwho button{flex:0 0 auto;background:none;border:0;padding:0;cursor:pointer;
+  font:400 8.5px/1 Philosopher,serif;letter-spacing:.16em;color:#8E1B14;
+  text-decoration:underline;text-underline-offset:3px}
+/* the form is not in the page at all until they are through the gate */
+.rsvp:not(.signed) .form{display:none}
+.rsvp.signed .gate{display:none}
+.rsvp:not(.signed) .gwho,.rsvp.ungated .gwho{display:none}
+/* a locked field still has to look like a field, just not an editable one */
+.fin[readonly]{background:#EFE6D3;color:#6B4A32}
+/* never tell a guest "thank you" for something that did not arrive */
+.failnote{display:none;font:400 9.5px/1.6 Philosopher,serif;letter-spacing:.06em;
+  color:#8E1B14;margin:12px 0 0}
+.failed .failnote{display:block}
+.send[disabled]{opacity:.5;cursor:default}
+</style></head>
+<body>
+<div class="stage" id="stage">
+
+  <div class="doc" id="doc">
+    <section class="sec-hall" id="hall">
+      <img class="hbg" src="assets/landing/bb-hall2.webp" alt="The entrance hall of the wedding house">
+      <div class="dwarm dw-L"></div>
+      <div class="dwarm dw-R"></div>
+      <div class="gshadow"></div>
+      <div class="greet"><img src="assets/landing/el-greet.webp" alt="Asmita and Soumabrata, welcoming you in"></div>
+      <div class="hnight"></div>
+      <div class="hglow hl-lampL"></div>
+      <div class="hglow hl-lampR"></div>
+      <div class="hglow hl-pend"></div>
+      <div class="hglow hl-poolL"></div>
+      <div class="hglow hl-poolR"></div>
+      <div class="hglow hl-mid"></div>
+      <div class="hmotes">
+        <i style="left:17%;animation-duration:9s;animation-delay:-1s"></i>
+        <i style="left:23%;animation-duration:11s;animation-delay:-4s"></i>
+        <i style="left:31%;animation-duration:10s;animation-delay:-7s"></i>
+        <i style="left:50%;animation-duration:12s;animation-delay:-2s"></i>
+        <i style="left:69%;animation-duration:9.5s;animation-delay:-9s"></i>
+        <i style="left:77%;animation-duration:11.5s;animation-delay:-5s"></i>
+        <i style="left:83%;animation-duration:10.5s;animation-delay:-3s"></i>
+      </div>
+      <div class="hfoot"></div>
+      <div class="hwel">Esho, esho &mdash; you found us.</div>
+      <div class="dlab dlab-L">STUDY ROOM<b>our story</b></div>
+      <div class="dlab dlab-R">THE EVENTS<b>this way</b></div>
+      <div class="dhit dhit-L" data-left role="button" tabindex="0" aria-label="The study room, and our story"></div>
+      <div class="dhit dhit-R" data-right role="button" tabindex="0" aria-label="Go through to the events"></div>
+    </section>
+
+    <section class="pata"><i class="seam"></i>
+      <div class="eyebrow">SAVE THE DATE</div>
+      <div class="big">26 &amp; 27<br>January 2027</div>
+      <div class="where">BARRACKPORE &middot; KOLKATA</div>
+      <div class="rule"></div>
+      <div class="cd" id="cd">
+        <div><u id="d">--</u><s>DAYS</s></div>
+        <div><u id="h">--</u><s>HOURS</s></div>
+        <div><u id="m">--</u><s>MINS</s></div>
+        <div><u id="s">--</u><s>SECS</s></div>
+      </div>
+      <div class="cdlabel">until the Sangeet begins<br>26 January, 6:30 PM</div>
+    </section>
+
+    <section class="scene sg">
+      <img class="bg" loading="lazy" decoding="async" src="assets/landing/sg-base.webp" alt="The courtyard during the sangeet">
+      <img class="sg-empty" loading="lazy" decoding="async" src="assets/landing/bb-courtyard.webp" alt="">
+      <div class="sg-canopy"><i><img src="assets/landing/sg-canopy.webp" alt=""></i></div>
+      <div class="glowdot sg-lamp" style="left:11.5%;top:14%"></div>
+      <div class="glowdot sg-lamp" style="left:38.1%;top:14%;animation-delay:-.7s"></div>
+      <div class="glowdot sg-lamp" style="left:62.7%;top:14%;animation-delay:-1.3s"></div>
+      <div class="glowdot sg-bulb" style="left:23.79%;top:6.23%;animation-range:entry 26% entry 31%"><i style="animation-delay:0s"></i></div>
+      <div class="glowdot sg-bulb" style="left:31.29%;top:7.44%;animation-range:entry 30% entry 35%"><i style="animation-delay:-.3s"></i></div>
+      <div class="glowdot sg-bulb" style="left:35.33%;top:7.66%;animation-range:entry 34% entry 39%"><i style="animation-delay:-.6s"></i></div>
+      <div class="glowdot sg-bulb" style="left:39.38%;top:7.44%;animation-range:entry 39% entry 44%"><i style="animation-delay:-.9s"></i></div>
+      <div class="glowdot sg-bulb" style="left:42.96%;top:6.83%;animation-range:entry 43% entry 48%"><i style="animation-delay:-1.2s"></i></div>
+      <div class="glowdot sg-bulb" style="left:46.19%;top:5.79%;animation-range:entry 47% entry 52%"><i style="animation-delay:-1.5s"></i></div>
+      <div class="glowdot sg-bulb" style="left:54.04%;top:5.79%;animation-range:entry 51% entry 56%"><i style="animation-delay:-1.8s"></i></div>
+      <div class="glowdot sg-bulb" style="left:57.04%;top:6.89%;animation-range:entry 55% entry 60%"><i style="animation-delay:-2.1s"></i></div>
+      <div class="glowdot sg-bulb" style="left:60.74%;top:7.66%;animation-range:entry 60% entry 65%"><i style="animation-delay:-2.4s"></i></div>
+      <div class="glowdot sg-bulb" style="left:65.01%;top:7.99%;animation-range:entry 64% entry 69%"><i style="animation-delay:-2.7s"></i></div>
+      <div class="glowdot sg-bulb" style="left:69.17%;top:7.82%;animation-range:entry 68% entry 73%"><i style="animation-delay:-3s"></i></div>
+      <div class="glowdot sg-bulb" style="left:77.25%;top:6.5%;animation-range:entry 72% entry 77%"><i style="animation-delay:-3.3s"></i></div>
+      <div class="sg-warm"></div>
+      <div class="sgflash"></div>
+      <div class="petals">
+        <i style="left:9%;animation-duration:9s;animation-delay:-1s"></i>
+        <i style="left:22%;animation-duration:11s;animation-delay:-4s"></i>
+        <i style="left:37%;animation-duration:10s;animation-delay:-7s"></i>
+        <i style="left:51%;animation-duration:12s;animation-delay:-2s"></i>
+        <i style="left:64%;animation-duration:9.5s;animation-delay:-9s"></i>
+        <i style="left:78%;animation-duration:11.5s;animation-delay:-5s"></i>
+        <i style="left:90%;animation-duration:10.5s;animation-delay:-3s"></i>
+      </div>
+      <div class="sgburst">
+        <i style="left:88.9%;width:11px;height:9px;background:#F5C13A;animation-delay:0.01s"></i>
+        <i style="left:41.3%;width:13px;height:10px;background:#E8761A;animation-delay:0.07s"></i>
+        <i style="left:26.4%;width:9px;height:7px;background:#F08A24;animation-delay:0.34s"></i>
+        <i style="left:11.1%;width:14px;height:11px;background:#F6A93B;animation-delay:0.23s"></i>
+        <i style="left:60.6%;width:12px;height:9px;background:#E8761A;animation-delay:0.42s"></i>
+        <i style="left:75.4%;width:13px;height:10px;background:#F6A93B;animation-delay:0.36s"></i>
+        <i style="left:21.5%;width:14px;height:11px;background:#F5C13A;animation-delay:0.31s"></i>
+        <i style="left:93.0%;width:11px;height:7px;background:#F6A93B;animation-delay:0.54s"></i>
+        <i style="left:9.1%;width:12px;height:10px;background:#F6A93B;animation-delay:0.39s"></i>
+        <i style="left:76.2%;width:14px;height:10px;background:#E8761A;animation-delay:0.09s"></i>
+        <i style="left:51.7%;width:14px;height:10px;background:#F08A24;animation-delay:0.11s"></i>
+        <i style="left:8.8%;width:12px;height:10px;background:#F6A93B;animation-delay:0.31s"></i>
+        <i style="left:27.7%;width:13px;height:10px;background:#F5C13A;animation-delay:0.06s"></i>
+        <i style="left:52.5%;width:15px;height:12px;background:#F5C13A;animation-delay:0.3s"></i>
+        <i style="left:15.2%;width:13px;height:11px;background:#D95F12;animation-delay:0.39s"></i>
+        <i style="left:23.6%;width:13px;height:11px;background:#F6A93B;animation-delay:0.51s"></i>
+        <i style="left:10.5%;width:12px;height:10px;background:#F08A24;animation-delay:0.25s"></i>
+        <i style="left:6.3%;width:12px;height:9px;background:#E8761A;animation-delay:0.01s"></i>
+        <i style="left:66.3%;width:10px;height:6px;background:#F6A93B;animation-delay:0.52s"></i>
+        <i style="left:90.7%;width:12px;height:8px;background:#F08A24;animation-delay:0.05s"></i>
+        <i style="left:93.6%;width:12px;height:9px;background:#F08A24;animation-delay:0.11s"></i>
+        <i style="left:26.1%;width:13px;height:11px;background:#D95F12;animation-delay:0.42s"></i>
+        <i style="left:91.3%;width:10px;height:8px;background:#F6A93B;animation-delay:0.06s"></i>
+        <i style="left:62.7%;width:14px;height:10px;background:#E8761A;animation-delay:0.31s"></i>
+        <i style="left:25.0%;width:12px;height:10px;background:#D95F12;animation-delay:0.5s"></i>
+        <i style="left:73.4%;width:14px;height:11px;background:#F6A93B;animation-delay:0.45s"></i>
+        <i style="left:66.3%;width:12px;height:10px;background:#FFD27A;animation-delay:0.38s"></i>
+        <i style="left:71.8%;width:13px;height:10px;background:#F5C13A;animation-delay:0.23s"></i>
+        <i style="left:74.3%;width:13px;height:9px;background:#F5C13A;animation-delay:0.3s"></i>
+        <i style="left:11.3%;width:14px;height:12px;background:#F6A93B;animation-delay:0.18s"></i>
+      </div>
+      <div class="sg-ring"></div>
+      <div class="sg-glow"></div>
+      <div class="sg-pulse"></div>
+      <div class="sghint">A SHOWER OF MARIGOLDS?</div>
+      <div class="sg-hit" data-dhol role="button" tabindex="0" aria-label="Play the dhol and the harmonium"></div>
+      <div class="evcard">
+        <div class="k">THE FIRST EVENING</div>
+        <h3>Sangeet</h3>
+        <div class="t">Tuesday 26 January 2027<br>6:30 PM</div>
+        <div class="v">Netaji Sporting Club, Barrackpore</div>
+        <div class="mrule"></div>
+        <a href="https://maps.app.goo.gl/2G2kFtYsuDpTQ3hm6" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
+      </div>
+    </section>
+
+    <section class="scene hl-scene hl">
+      <img class="bg" loading="lazy" decoding="async" src="assets/landing/hl-base.webp" alt="The terrace during the haldi">
+      <div class="hl-leaf hl-L"><img src="assets/landing/hl-leafL.webp" alt=""></div>
+      <div class="hl-leaf hl-R"><img src="assets/landing/hl-leafR.webp" alt=""></div>
+      <div class="motes">
+        <i style="left:6%;animation-duration:7s;animation-delay:-1s"></i>
+        <i style="left:17%;animation-duration:9s;animation-delay:-4s"></i>
+        <i style="left:28%;animation-duration:8s;animation-delay:-6s"></i>
+        <i style="left:39%;animation-duration:10s;animation-delay:-2s"></i>
+        <i style="left:48%;animation-duration:7.5s;animation-delay:-8s"></i>
+        <i style="left:59%;animation-duration:9.5s;animation-delay:-3s"></i>
+        <i style="left:70%;animation-duration:8.5s;animation-delay:-5.5s"></i>
+        <i style="left:82%;animation-duration:11s;animation-delay:-7s"></i>
+        <i style="left:92%;animation-duration:8.2s;animation-delay:-9.5s"></i>
+      </div>
+      <div class="hl-bloom"></div>
+      <div class="evcard">
+        <div class="k">TURMERIC AND SUNLIGHT</div>
+        <h3>Haldi</h3>
+        <div class="t">Wednesday 27 January 2027<br>11:00 AM</div>
+        <div class="v">HRS Bhavan, Barrackpore</div>
+        <div class="mrule"></div>
+        <a href="https://maps.app.goo.gl/HmYmd2ohnetHe85w6" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
+      </div>
+    </section>
+
+    <section class="scene wd-scene wd">
+      <img class="bg" loading="lazy" decoding="async" src="assets/landing/wd-base.webp" alt="The wedding in the thakur dalan">
+      <div class="wd-flame"><img src="assets/landing/wd-flame.webp" alt=""></div>
+      <div class="wd-firelight"></div>
+      <div class="wd-lamp" style="left:13.5%;top:50.5%"></div>
+      <div class="wd-lamp" style="left:86.4%;top:50.5%;animation-delay:-1.1s"></div>
+      <div class="sparks">
+        <i style="left:14%;animation-duration:2.6s;animation-delay:-.4s"></i>
+        <i style="left:31%;animation-duration:3.1s;animation-delay:-1.5s"></i>
+        <i style="left:47%;animation-duration:2.3s;animation-delay:-2.2s"></i>
+        <i style="left:62%;animation-duration:3.4s;animation-delay:-.9s"></i>
+        <i style="left:79%;animation-duration:2.8s;animation-delay:-1.9s"></i>
+      </div>
+      <div class="wd-rings"></div>
+      <div class="wd-dim"></div>
+      <div class="paan" data-paan role="button" tabindex="0" aria-label="Lower the betel leaves">
+        <span class="pl"><img src="assets/landing/wd-paanL.webp" alt=""></span>
+        <span class="pr"><img src="assets/landing/wd-paanR.webp" alt=""></span>
+      </div>
+      <div class="paanhint">A LITTLE SHUBHO DRISHTI?</div>
+      <div class="evcard">
+        <div class="k">THE LONG NIGHT</div>
+        <h3>Wedding</h3>
+        <div class="t">Wednesday 27 January 2027<br>7:30 PM</div>
+        <div class="v">HRS Bhavan, Barrackpore</div>
+        <div class="mrule"></div>
+        <a href="https://maps.app.goo.gl/HmYmd2ohnetHe85w6" target="_blank" rel="noopener">MAP</a><div class="mrule b"></div>
+        <div class="x">Muhurat at 11:50 PM &middot; stay as long as you like</div>
+      </div>
+    </section>
+
+    <section class="scene vd-scene vd">
+      <img class="bg" loading="lazy" decoding="async" src="assets/landing/vd-base.webp" alt="The house at dawn, the morning after">
+      <div class="vd-gar"><img src="assets/landing/vd-gar.webp" alt=""></div>
+      <div class="vd-doorglow"></div>
+      <div class="rice">
+        <i style="left:8%;animation-duration:3.4s;animation-delay:-.5s"></i>
+        <i style="left:21%;animation-duration:4.1s;animation-delay:-2.1s"></i>
+        <i style="left:34%;animation-duration:3.7s;animation-delay:-3.3s"></i>
+        <i style="left:47%;animation-duration:4.4s;animation-delay:-1.2s"></i>
+        <i style="left:58%;animation-duration:3.2s;animation-delay:-2.8s"></i>
+        <i style="left:71%;animation-duration:4s;animation-delay:-.9s"></i>
+        <i style="left:86%;animation-duration:3.6s;animation-delay:-3.8s"></i>
+      </div>
+      <div class="vd-dawn"></div>
+    </section>
+
+    <section class="vd-pata">
+      <i class="seam"></i>
+      <div class="eyebrow">THE LAST MORNING</div>
+      <h3>Vidaayi</h3>
+      <div class="t">Thursday 28 January 2027<br>10:30 AM</div>
+      <div class="v">At the house</div>
+      <div class="rule"></div>
+      <a href="https://maps.app.goo.gl/ETewoV1iYmEoPjV68" target="_blank" rel="noopener">MAP</a><div class="rule b"></div>
+    </section>
+
+    <section class="keep">
+      <div class="keepcard">
+        <div class="k">ASMITA &amp; SOUMABRATA</div>
+        <div class="nm">One card to keep</div>
+        <div class="krow"><em>Sangeet</em><span>26 Jan, 6:30 PM &middot; Netaji Sporting Club, Barrackpore</span></div>
+        <div class="krow"><em>Haldi</em><span>27 Jan, 11:00 AM &middot; HRS Bhavan, Barrackpore</span></div>
+        <div class="krow"><em>Wedding</em><span>27 Jan, 7:30 PM &middot; HRS Bhavan, Barrackpore<br>Muhurat 11:50 PM</span></div>
+        <div class="krow"><em>Vidaayi</em><span>28 Jan, 10:30 AM &middot; The house</span></div>
+      </div>
+      <div class="note">FORMAL INVITATION AND DETAILED<br>LOGISTICS TO FOLLOW</div>
+    </section>
+
+    <section class="rsvp" id="rsvp">
+      <div class="inner">
+        <div class="eyebrow">WILL YOU BE THERE</div>
+        <div class="big">RSVP</div>
+        <div class="where">BY 23 SEPTEMBER 2026</div>
+        <div class="rule"></div>
+        <div class="gate" data-gate>
+          <p class="gtext">So that we know it is really you, please sign in with Google
+             before you answer. We only ever see your name and your email address &mdash;
+             nothing else, and nothing from your account.</p>
+          <div class="gbtn" id="gbtn"></div>
+          <p class="fnote">No Google account? Call us instead &mdash; the numbers are just below.</p>
+        </div>
+        <div class="gwho" data-who>
+          <span class="d"><b data-wname>&nbsp;</b><s data-wmail>&nbsp;</s></span>
+          <button type="button" data-signout>NOT YOU?</button>
+        </div>
+        <form class="form" data-rsvp novalidate>
+          <div class="fset">
+            <label class="flab" for="r-name">Guest name</label>
+            <input class="fin" id="r-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="fset">
+            <label class="flab" for="r-phone">Contact number</label>
+            <input class="fin" id="r-phone" name="phone" type="tel" autocomplete="tel" required>
+            <span class="fnote">Please share your WhatsApp number</span>
+          </div>
+          <div class="fset">
+            <label class="flab" for="r-email">Email address</label>
+            <input class="fin" id="r-email" name="email" type="email" autocomplete="email"
+                   inputmode="email" required>
+          </div>
+          <div class="fset">
+            <span class="flab">Will you join us?</span>
+            <div class="opt">
+              <label><input type="radio" name="coming" value="yes" data-yes checked><span>Joyfully yes! &#127881;</span></label>
+              <label><input type="radio" name="coming" value="no" data-no><span>Sadly, can&rsquo;t make it &#128148;</span></label>
+            </div>
+          </div>
+
+          <div class="rlog">
+            <div class="fset">
+              <label class="flab" for="r-arrive">Date of arrival</label>
+              <input class="fin" id="r-arrive" name="arrival" type="date"
+                     min="2027-01-01" max="2027-01-31">
+              <span class="fnote">January 2027</span>
+            </div>
+            <div class="fset">
+              <span class="flab">Which celebrations will you join?</span>
+              <label class="evrow"><input type="checkbox" name="events" value="Sangeet"><i class="box"></i><span class="d"><b>Sangeet</b><s>26 JANUARY &middot; 6:30 PM</s></span></label>
+              <label class="evrow"><input type="checkbox" name="events" value="Haldi"><i class="box"></i><span class="d"><b>Haldi</b><s>27 JANUARY &middot; 11:00 AM</s></span></label>
+              <label class="evrow"><input type="checkbox" name="events" value="Wedding"><i class="box"></i><span class="d"><b>Wedding</b><s>27 JANUARY &middot; 7:30 PM</s></span></label>
+              <label class="evrow"><input type="checkbox" name="events" value="Vidaayi"><i class="box"></i><span class="d"><b>Vidaayi</b><s>28 JANUARY &middot; 10:30 AM</s></span></label>
+            </div>
+            <div class="fset">
+              <span class="flab">Accommodation</span>
+              <div class="opt">
+                <label><input type="radio" name="stay" value="yes"><span>Yes please!</span></label>
+                <label><input type="radio" name="stay" value="no"><span>I am sorted, thank you</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="fset">
+            <label class="flab" for="r-wish">Best wishes</label>
+            <textarea class="fin" id="r-wish" name="wishes" rows="3"
+                      placeholder="Anything you&rsquo;d like to say to the two of us"></textarea>
+            <span class="fnote">Optional &mdash; we will read every one of them</span>
+          </div>
+          <div class="fset">
+            <label class="flab" for="r-songs">Playlist picks</label>
+            <textarea class="fin" id="r-songs" name="songs" rows="3"
+                      placeholder="e.g., Song name - Artist"></textarea>
+            <span class="fnote">Recommend one song for Haldi and one for Sangeet (optional)</span>
+          </div>
+          <div class="miss">Name, contact number and a valid email, please.</div>
+          <div class="failnote">That did not send. Please try once more, or call us &mdash; the numbers are just below.</div>
+          <button class="send" type="submit">SEND</button>
+        </form>
+        <div class="thanks">
+          <div class="big">Thank you</div>
+          <div class="where">WE HAVE YOUR ANSWER</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE FAQ IS HIDDEN. Ten of these twelve answers still say XYZ, so the
+         whole section is out of the page until they are written. To bring it
+         back: delete this comment wrapper. Nothing else depends on it - the
+         garland thread measures from .keep, not from here. -->
+    <!--
+    <section class="faq" id="faq">
+      <div class="eyebrow">BEFORE YOU COME</div>
+      <div class="big">Questions</div>
+      <div class="rule"></div>
+        <details class="q"><summary>What should I wear?</summary><p>Bengali weddings run bright, so wear whatever makes you feel wonderful — sari, kurta, sherwani, lehenga, all of it belongs. The Haldi is the one to wear something you would not mind turmeric on. XYZ</p></details>
+        <details class="q"><summary>What time should I actually arrive?</summary><p>The times on the card are real ones, not polite ones. For the wedding on the 27th the muhurat is at 11:50 PM, so come by XYZ if you would like to be there for it.</p></details>
+        <details class="q"><summary>Is food served?</summary><p>Yes. Dinner at the Sangeet on the 26th, lunch at the Haldi and dinner at the Wedding on the 27th. XYZ</p></details>
+        <details class="q"><summary>Can I bring my children?</summary><p>Please do. XYZ</p></details>
+        <details class="q"><summary>Where should I stay?</summary><p>Rooms are at Mangaldhara. Check-in XYZ, check-out XYZ. XYZ</p></details>
+        <details class="q"><summary>How do I get to Barrackpore?</summary><p>From the airport, XYZ. From Howrah, XYZ. From Sealdah, XYZ.</p></details>
+        <details class="q"><summary>Is there parking at the venues?</summary><p>XYZ</p></details>
+        <details class="q"><summary>Is the venue easy for elderly guests?</summary><p>XYZ</p></details>
+        <details class="q"><summary>What is the weather like in late January?</summary><p>About the kindest Kolkata gets — roughly 14 to 25 degrees. Mornings are genuinely cool, so bring something warm for the Haldi and the Vidaayi.</p></details>
+        <details class="q"><summary>Can I take photographs during the ceremony?</summary><p>XYZ</p></details>
+        <details class="q"><summary>Are gifts expected?</summary><p>XYZ</p></details>
+        <details class="q"><summary>Who do I call if I am lost or running late?</summary><p>The numbers are just below. Save one before you set off.</p></details>
+      <div class="hold">PLACEHOLDER ANSWERS &middot; EVERY XYZ NEEDS REPLACING</div>
+    </section>
+    -->
+
+    <section class="cts" id="contact">
+      <div class="eyebrow">IF YOU NEED ANYTHING</div>
+      <div class="big">Call us</div>
+      <div class="rule"></div>
+        <div class="ct"><span class="d"><b>Asmita</b><s>THE BRIDE</s></span><a href="tel:+918848164784" data-tel="+918848164784">+91 88481 64784</a></div>
+        <div class="ct"><span class="d"><b>Soumabrata</b><s>THE GROOM</s></span><a href="tel:+919110980545" data-tel="+919110980545">+91 91109 80545</a></div>
+    </section>
+    <div class="tail"></div>
+  </div>
+
+  <div class="world">
+    <img class="hs full" src="assets/landing/nb-base.webp" alt="A Bengali wedding house at night">
+    <div class="glow"></div>
+    <div class="doorway">
+      <div class="leaf lf"><img src="assets/landing/nb-doorL.webp" alt=""></div>
+      <div class="leaf rf"><img src="assets/landing/nb-doorR.webp" alt=""></div>
+    </div>
+    <div class="wire"><img src="assets/landing/nb-wire.webp" alt=""></div>
+    <div class="thud"></div>
+    <div class="brassglow"></div>
+    <div class="brass"><img src="assets/landing/nb-face.webp" alt=""></div>
+    <div class="ring"><img src="assets/landing/nb-ring.webp" alt=""></div>
+    <div class="knockzone" data-knock role="button" tabindex="0" aria-label="Knock to enter"></div>
+
+    <div class="swag" style="left:1.5%;top:13.1%;width:33%"><i style="animation-delay:0s"><img src="assets/landing/el-swag.webp" alt=""></i></div>
+    <div class="swag" style="left:33%;top:14.4%;width:35%"><i style="animation-delay:-.5s;display:block;transform:scaleX(-1)"><img src="assets/landing/el-swag.webp" alt=""></i></div>
+    <div class="swag" style="left:66.5%;top:12.8%;width:32%"><i style="animation-delay:-1.05s"><img src="assets/landing/el-swag.webp" alt=""></i></div>
+
+    <div class="drop" style="left:20.2%;top:44%;width:5.6%;animation-delay:-.15s"><img src="assets/landing/el-drop.webp" alt=""></div>
+    <div class="drop" style="left:73.9%;top:44%;width:5.6%;animation-delay:-.55s"><img src="assets/landing/el-drop.webp" alt=""></div>
+
+    <div class="banner">
+      <img src="assets/landing/el-banner2.webp" alt="">
+      <div class="banglow"></div>
+      <svg class="bantxt" viewBox="0 0 1216 720" role="img"
+           aria-label="Save the date. Asmita and Soumabrata. 26 and 27 January 2027.">
+        <defs>
+          <path id="bta" fill="none" d="M200 335 Q608 475 1016 335"/>
+          <path id="btb" fill="none" d="M200 421 Q608 561 1016 421"/>
+          <path id="btc" fill="none" d="M200 485 Q608 625 1016 485"/>
+        </defs>
+        <text class="s"><textPath href="#bta" startOffset="50.6%" text-anchor="middle">SAVE THE DATE</textPath></text>
+        <text class="n"><textPath href="#btb" startOffset="50%"   text-anchor="middle">Asmita &amp; Soumabrata</textPath></text>
+        <text class="d"><textPath href="#btc" startOffset="50.4%" text-anchor="middle">26 &amp; 27 JANUARY 2027</textPath></text>
+      </svg>
+    </div>
+
+    <div class="ban" style="left:-3%;top:69.5%;width:26%;animation-delay:-.3s"><img src="assets/landing/el-banana.webp" alt=""></div>
+    <div class="ban" style="left:77%;top:69.5%;width:26%;animation-delay:-.52s"><img src="assets/landing/el-banana.webp" alt=""></div>
+
+    <div class="kgrass" style="left:-11%;top:76.5%;width:42%;animation-delay:-.08s"><img src="assets/landing/el-kansL.webp" alt=""></div>
+    <div class="kgrass" style="left:69%;top:77.5%;width:42%;animation-delay:-.34s"><img src="assets/landing/el-kansR.webp" alt=""></div>
+
+    <div class="tshadow"></div><div class="tcontact"></div>
+    <div class="taxi"><img src="assets/landing/el-taxi.webp" alt=""></div>
+    <div class="beam cone"></div>
+    <div class="beam pool"></div>
+    <div class="beam lamp1"></div>
+    <div class="beam lamp2"></div>
+
+    <div class="lg st"></div>
+    <div class="lg w1"></div><div class="lg w2"></div><div class="lg w3"></div>
+    <div class="lg w4"></div><div class="lg w5"></div><div class="lg wf"></div>
+
+    <div class="spill"></div>
+    <div class="chill"></div>
+    <div class="night"></div>
+
+    <div class="wind">
+      <i style="left:-6%;top:24%;animation-duration:6s;animation-delay:-1s"></i>
+      <i style="left:-6%;top:41%;animation-duration:7.4s;animation-delay:-3.4s"></i>
+      <i style="left:-6%;top:58%;animation-duration:6.6s;animation-delay:-5.2s"></i>
+      <i style="left:-6%;top:72%;animation-duration:8s;animation-delay:-2.2s"></i>
+      <i style="left:-6%;top:85%;animation-duration:7s;animation-delay:-6.1s"></i>
+    </div>
+
+    <div class="type">
+      <div class="plaque">KNOCK TO ENTER</div>
+    </div>
+  </div>
+
+  <div class="foot"></div>
+  <div class="skip" data-skip role="button" tabindex="0">Skip to RSVP</div>
+  <div class="snd" data-snd role="button" tabindex="0" aria-label="Sound on or off"></div>
+  <div class="thread" aria-hidden="true"><i class="tspark"></i>
+    <i class="thrk"></i><i class="tfil"></i>
+    <i class="tbead"></i><i class="tbead"></i><i class="tbead"></i><i class="tbead"></i>
+  </div>
+
+  <!-- ============ THE STUDY ROOM ============
+       Off the scroll on purpose. Nothing here loads until the door is opened:
+       the room and all fourteen photographs sit on data-src until then, so the
+       landing page still weighs what it weighed before. -->
+  <div class="study" id="study" aria-hidden="true">
+    <img class="stbg" data-src="assets/landing/bb-study.webp" alt="A study room - bookshelf, desk, guitar and a letter left on the desk">
+    <div class="st-lamp"></div>
+    <div class="st-glow"></div>
+    <div class="st-sheet"><i></i></div>
+    <div class="st-pulse"></div>
+    <div class="st-hint">A LETTER, HALF-WRITTEN</div>
+    <div class="st-hit" data-paper role="button" tabindex="0" aria-label="Read the letter on the desk"></div>
+    <div class="st-exit st-exitL" data-studyback role="button" tabindex="0">THE HALL<b>go back</b></div>
+    <div class="st-exit st-exitR" data-studyevents role="button" tabindex="0">THE EVENTS<b>this way</b></div>
+  </div>
+
+  <div class="story" id="story" role="dialog" aria-modal="true" aria-label="Our story" aria-hidden="true">
+    <div class="st-card">
+      <div class="st-eyebrow">OUR STORY</div>
+      <div class="st-title">Asmita &amp; Soumabrata</div>
+      <div class="st-rule"></div>
+    <div class="st-sec">
+      <h3 class="st-h">The Beginning</h3>
+      <p class="st-p">We've known each other for 20 years. But here's the thing &mdash; we met as 9 year olds and were only in school together for 4 years. Four years. After that, life pulled us in different directions and we never actually imagined this is how our story is going to turn out. Back then, we were just two kids sharing auto rides and exchanging dictionaries. But little did we know.</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os01.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os02.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os03.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os04.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os05.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os01.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os02.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os03.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os04.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os05.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+    <div class="st-sec">
+      <h3 class="st-h">Staying Connected</h3>
+      <p class="st-p">What kept us tethered through the distance was the weirdest thing: birthday calls. At first, we'd beg our parents for the phone on each other's birthdays. Just a quick call as a ritual. Then we moved to college and got our own phones, and the ritual stuck. Almost every single birthday, a call would come through. For 13 years, that's how we marked time.</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os06.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os07.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os08.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os09.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os10.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os06.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os07.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os08.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os09.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os10.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+    <div class="st-sec">
+      <h3 class="st-h">A Pattern of Missing</h3>
+      <p class="st-p">Meanwhile, life kept pulling us apart. We'd end up in the same cities &mdash; Kolkata, Pune, Bangalore &mdash; but never at the right moment. Thirteen years of missing each other by days, months, sometimes years. Always close, never quite there.</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os11.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os12.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os13.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os14.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os15.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os11.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os12.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os13.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os14.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os15.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+    <div class="st-sec dated">
+      <h3 class="st-h">December 15th, 2023</h3>
+      <div class="st-sub">BANGALORE</div>
+      <p class="st-p">Finally she came to attend a friend's wedding and he was living in the same city at the same time. We stayed up the whole night under the stars &mdash; jamming, talking about agritech, throwing around startup ideas, having conversations where time just disappears. And just like that when the sun came up, something shifted. We looked at each other and we both realized we weren't &ldquo;just friends&rdquo; anymore.</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os16.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os17.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os18.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os19.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os20.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os16.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os17.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os18.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os19.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os20.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+    <div class="st-sec">
+      <h3 class="st-h">Three Years Later</h3>
+      <p class="st-p">Midnight sushi runs, monsoon treks, flights booked whenever we could afford them, bike rides through cities, Google Meet dates across time zones with a bowl of ramen, celebrating each other's small and big wins, impromptu trips that made no sense but felt like everything. We just kept showing up.</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:36s"><div class="st-ph"><img data-src="assets/landing/os21.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os22.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os23.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os24.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os25.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os21.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os22.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os23.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os24.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os25.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+    <div class="st-sec">
+      <h3 class="st-h">The Sun and The Moon</h3>
+      <p class="st-p">She's scared of water but she's learning how to surf with him. He's a nightowl but wakes up at 6:30 AM for runs for her. We're nothing alike. We're different and codependent as the sun and the moon. And now, after 20 years of being clueless about how life could actually take such a surreal turn like this, we're getting married!</p>
+      <div class="st-strip"><div class="st-rail" style="animation-duration:29s"><div class="st-ph"><img data-src="assets/landing/os26.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os27.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os28.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os29.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os26.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os27.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os28.webp" alt="Asmita and Soumabrata"></div><div class="st-ph"><img data-src="assets/landing/os29.webp" alt="Asmita and Soumabrata"></div></div></div>
+    </div>
+      <div class="st-end">
+        <div class="st-rule"></div>
+        <i>&mdash; and you are part of what comes next.</i>
+      </div>
+    </div>
+  </div>
+
+  <button class="st-x" data-storyclose type="button" aria-label="Close the letter">&times;</button>
+  <div class="st-scroll untouched" aria-hidden="true"><b></b><i></i></div>
+
+  <img class="border full" src="assets/landing/bb-border.webp" alt="">
+</div>
+
+<script>
+var st=document.getElementById('stage');
+var T=new Date('2027-01-26T18:30:00+05:30').getTime();
+function tick(){
+  var x=T-Date.now(); if(x<0)x=0;
+  var d=Math.floor(x/864e5),h=Math.floor(x/36e5)%24,m=Math.floor(x/6e4)%60,s=Math.floor(x/1e3)%60;
+  document.getElementById('d').textContent=d;
+  document.getElementById('h').textContent=('0'+h).slice(-2);
+  document.getElementById('m').textContent=('0'+m).slice(-2);
+  document.getElementById('s').textContent=('0'+s).slice(-2);
+}
+tick(); setInterval(tick,1000);
+
+
+// --- RSVP. DELIBERATELY NOT CONNECTED.
+// The form collects the answers and hands them to submitRSVP(), which does
+// nothing but log. Point submitRSVP at a destination when one is chosen -
+// nothing else in this file needs to change.
+// ===================== CONFIG - THE ONLY TWO LINES TO EDIT =====================
+// 1. From Google Cloud Console > Credentials > OAuth client ID (Web application).
+//    Leave it empty and the sign-in gate does not appear at all - the form still
+//    works. Add your GitHub Pages address as an Authorized JavaScript origin.
+var GOOGLE_CLIENT_ID = '';
+// 2. The Apps Script Web App /exec URL that appends a row to your Sheet.
+//    Leave it empty and answers are logged to the console instead of sent.
+var RSVP_ENDPOINT    = '';
+// ==============================================================================
+
+// Posted as text/plain on purpose: it keeps the request "simple", so the browser
+// does not send a CORS preflight, which an Apps Script Web App cannot answer.
+function submitRSVP(data, ok, fail){
+  if(!RSVP_ENDPOINT){ console.log('RSVP collected, no endpoint set:', data); ok&&ok(); return; }
+  fetch(RSVP_ENDPOINT,{method:'POST',redirect:'follow',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(data)})
+    .then(function(r){ return r.ok ? r.text() : Promise.reject(r.status); })
+    .then(function(t){ var j={}; try{ j=JSON.parse(t); }catch(e){}
+      if(j.ok===false) return Promise.reject(j.error||'refused');
+      ok&&ok(); })
+    .catch(function(e){ console.warn('RSVP failed:', e); fail&&fail(); });
+}
+
+// ---- the gate -------------------------------------------------------------
+var GCRED=null;
+(function(){
+  var sec=document.querySelector('.rsvp'); if(!sec) return;
+  // Open the gate and leave it open. Used when there is no client id yet, and
+  // when Google's script does not arrive - a guest must never be stuck.
+  function ungate(){ sec.classList.add('signed','ungated'); }
+  if(!GOOGLE_CLIENT_ID){ ungate(); return; }
+
+  function onCred(resp){
+    GCRED = resp && resp.credential; if(!GCRED) return;
+    var who={};
+    try{
+      var b=GCRED.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+      who=JSON.parse(decodeURIComponent(escape(atob(b))));
+    }catch(e){}
+    // shown so the guest can see who they signed in as. The server does not
+    // trust any of it - it re-checks the credential with Google.
+    var em=document.getElementById('r-email');
+    if(who.email){ em.value=who.email; em.setAttribute('readonly','readonly'); }
+    var nm=document.getElementById('r-name');
+    if(who.name && !nm.value) nm.value=who.name;
+    sec.querySelector('[data-wname]').textContent = who.name || 'Signed in';
+    sec.querySelector('[data-wmail]').textContent = who.email || '';
+    sec.classList.add('signed');
+  }
+
+  var sc=document.createElement('script');
+  sc.src='https://accounts.google.com/gsi/client'; sc.async=true; sc.defer=true;
+  sc.onerror=ungate;
+  sc.onload=function(){
+    try{
+      google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:onCred,
+        auto_select:false, cancel_on_tap_outside:true});
+      google.accounts.id.renderButton(document.getElementById('gbtn'),
+        {theme:'outline', size:'large', text:'signin_with', shape:'pill', width:250});
+    }catch(e){ ungate(); }
+  };
+  document.head.appendChild(sc);
+  // belt and braces: a blocked script does not always fire onerror
+  setTimeout(function(){
+    if(!sec.classList.contains('signed') &&
+       !(window.google&&google.accounts&&google.accounts.id)) ungate();
+  },4000);
+
+  var so=sec.querySelector('[data-signout]');
+  if(so) so.addEventListener('click',function(){
+    GCRED=null;
+    var em=document.getElementById('r-email');
+    em.value=''; em.removeAttribute('readonly');
+    sec.classList.remove('signed');
+    try{ google.accounts.id.disableAutoSelect(); }catch(e){}
+  });
+})();
+// The phone numbers. The href does the work wherever the browser allows it;
+// the handler copies as well, because a sandboxed frame silently refuses tel:
+// navigation and a button that does nothing at all is worse than either.
+document.querySelectorAll('[data-tel]').forEach(function(a){
+  a.addEventListener('click',function(){
+    var n=a.getAttribute('data-tel'), was=a.textContent;
+    var flash=function(){ a.textContent='COPIED'; a.classList.add('copied');
+      setTimeout(function(){ a.textContent=was; a.classList.remove('copied'); },1400); };
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(n).then(flash,function(){});
+      }else{
+        var t=document.createElement('textarea');
+        t.value=n; t.style.cssText='position:fixed;opacity:0';
+        document.body.appendChild(t); t.select();
+        document.execCommand('copy'); document.body.removeChild(t); flash();
+      }
+    }catch(e){}
+  });
+});
+
+var rf=document.querySelector('[data-rsvp]');
+if(rf){
+  // "Sadly, can't make it" folds the three logistics questions away. Only the
+  // four fields above the fold carry `required`, so a collapsed field can never
+  // be the reason a submit is refused - there is no attribute to keep in sync.
+  var rsec=rf.closest('.rsvp');
+  function comingSync(){
+    var no=rf.querySelector('[data-no]');
+    rsec.classList.toggle('nocome', !!(no&&no.checked));
+  }
+  rf.querySelectorAll('input[name=coming]').forEach(function(n){
+    n.addEventListener('change',comingSync);
+  });
+  comingSync();
+  // the note is a correction, not a verdict: it goes the moment they fix it
+  rf.addEventListener('input',function(){ rf.classList.remove('shownote'); });
+
+  rf.addEventListener('submit',function(e){
+    e.preventDefault();
+    // novalidate is on the form so the four required fields can be reported in
+    // the page's own voice rather than the browser's grey bubble
+    var miss=null;
+    ['r-name','r-phone','r-email'].forEach(function(id){
+      var n=document.getElementById(id);
+      if(!n.value.trim() && !miss) miss=n;
+    });
+    var em=document.getElementById('r-email');
+    if(!miss && em.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value)) miss=em;
+    if(miss){
+      rf.classList.add('shownote');
+      miss.focus(); miss.scrollIntoView({block:'center',behavior:'smooth'});
+      return;
+    }
+    var d={events:[]};
+    new FormData(rf).forEach(function(v,k){ if(k==='events'){d.events.push(v);} else {d[k]=v;} });
+    if(d.coming==='no'){ delete d.arrival; delete d.stay; d.events=[]; }
+    if(GCRED) d.credential=GCRED;      // the server verifies this with Google
+    var btn=rf.querySelector('.send');
+    btn.disabled=true; btn.textContent='SENDING\u2026';
+    rsec.classList.remove('failed');
+    submitRSVP(d,
+      function(){ rsec.classList.add('sent'); },
+      function(){ btn.disabled=false; btn.textContent='SEND'; rsec.classList.add('failed'); });
+  });
+}
+
+var p=new URLSearchParams(location.search);
+if(p.has('inside')){ st.classList.add('knocked','inside','opened');
+  if(p.has('y')) setTimeout(function(){document.getElementById('doc').scrollTop=+p.get('y')},300); }
+else if(p.has('t')){
+  st.classList.add('knocked','frozen'); var t=parseFloat(p.get('t'));
+  document.querySelectorAll('.stage *').forEach(function(e){
+    var cs=getComputedStyle(e); if(cs.animationName==='none')return;
+    e.style.animationDelay=cs.animationDelay.split(',').map(function(v){return (parseFloat(v)||0)-t+'s'}).join(',');
+  });
+}else{
+  var pn=st.querySelector('[data-paan]');
+  if(pn) pn.addEventListener('click',function(e){e.stopPropagation();st.classList.add('paanopen');});
+    // --- sound. Four real recordings, ~77 KB in total, supplied by the couple.
+  // The browser unlocks audio on the first tap, which is the knock itself, so
+  // every later cue is already unlocked by the time its timer fires.
+  var sndOn=true, SFX={}, sfxT=[];
+  // One AudioContext, created inside a real user gesture - the only moment iOS
+  // will allow it. The music layer fades GainNodes on this context, because
+  // iOS Safari ignores el.volume and a volume fade is silent-fails there.
+  function primeAudio(){
+    if(window.__bbAC){ if(window.__bbAC.state==='suspended') window.__bbAC.resume(); return; }
+    try{ var C=window.AudioContext||window.webkitAudioContext;
+         if(C){ window.__bbAC=new C(); if(window.__bbAC.state==='suspended') window.__bbAC.resume(); } }
+    catch(e){ window.__bbAC=null; }
+  }
+  ['knock','switch','engine','conch'].forEach(function(n){
+    var a=new Audio('assets/landing/sfx-'+n+'.mp3');   // mp3: servable and playable everywhere
+    a.preload='auto'; a.load(); SFX[n]=a;
+  });
+  function play(n){
+    if(!sndOn) return;                       // checked at FIRE time, not schedule time
+    var a=SFX[n]; if(!a) return;
+    try{ a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){}); }catch(e){}
+  }
+  function hush(){ for(var k in SFX){ try{ SFX[k].pause(); }catch(e){} } }
+  function cue(ms,n){ sfxT.push(setTimeout(function(){ play(n); }, ms)); }
+
+  var sb=st.querySelector('[data-snd]');
+  if(sb) sb.addEventListener('click',function(e){
+    e.stopPropagation(); sndOn=!sndOn; st.classList.toggle('muted',!sndOn);
+    if(!sndOn) hush();
+    if(window.__bbMusicMute) window.__bbMusicMute();
+    if(window.__bbStoryMute) window.__bbStoryMute();
+  });
+
+  var dh=st.querySelector('[data-dhol]');
+  if(dh) dh.addEventListener('click',function(e){
+    e.stopPropagation();
+    st.classList.add('dholused');
+    st.classList.remove('dholpulse');void st.offsetWidth;st.classList.add('dholpulse');
+    setTimeout(function(){st.classList.remove('dholpulse')},2150);
+  });
+  // Only the brass knocks. Nothing else on the page listens for a click, so the
+  // sequence cannot be jumped by a stray tap - however many times you tap.
+  var enterT=null;
+  function enter(){ if(enterT){clearTimeout(enterT);enterT=null;} st.classList.add('inside'); }
+  function knock(){
+    if(st.classList.contains('knocked')||st.classList.contains('inside')) return;
+    st.classList.add('knocked');
+    primeAudio();
+    cue( 140,'knock');   // four raps, matched to the ring
+    cue(1300,'switch');  // the street lamp catches, then flickers
+    cue(5000,'engine');  // the driver turns the key
+    cue(6400,'conch');   // the shankh, as the doors swing
+    enterT=setTimeout(enter,10700);
+  }
+  var kz=st.querySelector('[data-knock]');
+  if(kz){
+    kz.addEventListener('click',function(e){e.stopPropagation();knock();});
+    kz.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();knock();}
+    });
+  }
+
+  // The right doorway unlocks the scroll and goes on into the journey.
+  // The left one opens the study room - see openStudy() below.
+  function goEvents(){
+    st.classList.add('opened');
+    var nx=document.querySelector('.doc > .pata');
+    if(nx) nx.scrollIntoView({behavior:'smooth'});
+    // A guest who could not scroll in the hall has just learned the page does not
+    // move. Show them that it does: one 40px dip and back, cancelled the instant
+    // they touch it. No words, no artwork.
+    setTimeout(function(){
+      var d=document.getElementById('doc'); if(!d) return;
+      var start=d.scrollTop, prev=d.style.scrollBehavior, t0=null, off=false;
+      var stop=function(){ off=true; };
+      d.addEventListener('touchstart',stop,{passive:true,once:true});
+      d.addEventListener('wheel',stop,{passive:true,once:true});
+      d.style.scrollBehavior='auto';
+      (function step(ts){
+        if(off){ d.style.scrollBehavior=prev; return; }
+        if(t0===null) t0=ts;
+        var p=Math.min(1,(ts-t0)/900);
+        d.scrollTop=start+Math.sin(p*Math.PI)*40;
+        if(p<1) requestAnimationFrame(step); else d.style.scrollBehavior=prev;
+      })(performance.now());
+    },1800);
+  }
+  // ---------------------------------------------------------------- the study
+  // A side trip. It covers the stage rather than joining the scroll, so the
+  // journey's running order is untouched and you always come back out.
+  var studyLoaded=false;
+  function loadStudy(){
+    if(studyLoaded) return; studyLoaded=true;
+    songPrime();                    // start fetching the song now, not at the letter
+    // one pass, first open only: hand every data-src its real src
+    st.querySelectorAll('#study [data-src],#story [data-src]').forEach(function(im){
+      im.src=im.getAttribute('data-src'); im.removeAttribute('data-src');
+    });
+  }
+  // --- the letter's own song. One <audio> through its own GainNode on the same
+  // AudioContext the rest of the page uses, because iOS ignores el.volume.
+  var songEl=null, songG=null, songStopT=null;
+  function songFade(to,dur){
+    if(songG&&window.__bbAC){
+      var c=window.__bbAC,n=c.currentTime,g=songG.gain;
+      try{ g.cancelScheduledValues(n); g.setValueAtTime(g.value,n);
+           g.linearRampToValueAtTime(to,n+dur); }catch(e){}
+    }else if(songEl){ try{ songEl.volume=to; }catch(e){} }
+  }
+  // The ramp hangs off the element's own 'playing' event, not off the call to
+  // play(). Fading from the call meant part of the fade was spent on silence
+  // while the file was still arriving, which is most of why the song felt late.
+  function songUp(){
+    if(sndOn && st.classList.contains('instory')) songFade(0.85,0.45);
+  }
+  // Created and fetched when the ROOM opens, not when the letter does: 1.44 MB
+  // cannot arrive instantly, so it starts arriving while the guest is still
+  // looking at the desk.
+  function songPrime(){
+    if(songEl) return;
+    songEl=new Audio('assets/landing/music-story.mp3');   // 3:04, 64 kbps mono
+    songEl.loop=true; songEl.preload='auto';
+    songEl.addEventListener('playing',songUp);
+    // It has to be IN the document. Chromium does not reliably preload a media
+    // element that was never attached, which is why the head start this whole
+    // function exists for was not happening - measured: still one request, and
+    // it was the late one. Hidden, silent, and it never plays on its own.
+    songEl.setAttribute('aria-hidden','true');
+    songEl.style.cssText='position:absolute;width:0;height:0;opacity:0;pointer-events:none';
+    try{ st.appendChild(songEl); }catch(e){}
+    songEl.load();
+  }
+  function songOn(){
+    songPrime();
+    if(!songG&&window.__bbAC){
+      try{ var src=window.__bbAC.createMediaElementSource(songEl);
+           songG=window.__bbAC.createGain(); songG.gain.value=0;
+           src.connect(songG); songG.connect(window.__bbAC.destination); }
+      catch(e){ songG=null; }
+    }
+    if(!sndOn) return;
+    clearTimeout(songStopT);
+    var p=songEl.play(); if(p&&p.catch) p.catch(function(){});
+    if(!songEl.paused) songUp();     // already running: ramp now, no event coming
+  }
+  function songOff(){
+    if(!songEl) return;
+    songFade(0,1.1);
+    clearTimeout(songStopT);
+    songStopT=setTimeout(function(){ try{ songEl.pause(); songEl.currentTime=0; }catch(e){} },1250);
+  }
+  // the sound button has to reach the song too, not just the scene tracks
+  window.__bbStoryMute=function(){
+    if(!st.classList.contains('instory')){ songOff(); return; }
+    if(sndOn) songOn(); else songFade(0,0.3);
+  };
+
+  // --- the rail. The letter is long and nothing else said so.
+  var scEl=null, scM=null;
+  function scrollCue(){
+    var sv=document.getElementById('story');
+    if(!sv||!scEl||!scM) return;
+    var max=sv.scrollHeight-sv.clientHeight;
+    var p=max>4 ? Math.max(0,Math.min(1,sv.scrollTop/max)) : 0;
+    var run=Math.max(0, scEl.clientHeight-scM.offsetHeight);
+    scM.style.transform='translateY('+(p*run).toFixed(1)+'px)';
+    if(sv.scrollTop>6) scEl.classList.remove('untouched');
+  }
+
+  function openStudy(){
+    loadStudy();
+    st.classList.add('instudy');
+    // the room is meant to be quiet: the shehnai fades out and stays out until
+    // you step back into the hall
+    if(window.__bbQuietSet) window.__bbQuietSet(true);
+    var n=document.getElementById('study'); if(n) n.setAttribute('aria-hidden','false');
+  }
+  function closeStudy(){
+    st.classList.remove('instudy','instory');
+    songOff();
+    if(window.__bbQuietSet) window.__bbQuietSet(false);
+    var a=document.getElementById('study'), b=document.getElementById('story');
+    if(a) a.setAttribute('aria-hidden','true');
+    if(b) b.setAttribute('aria-hidden','true');
+  }
+  function openStory(){
+    st.classList.add('instory','storyread');
+    var n=document.getElementById('story');
+    if(n){ n.setAttribute('aria-hidden','false'); n.scrollTop=0; }
+    songOn();
+    setTimeout(scrollCue,60);
+    var c=st.querySelector('[data-storyclose]'); if(c) c.focus();
+  }
+  function closeStory(){
+    st.classList.remove('instory');
+    songOff();
+    var n=document.getElementById('story'); if(n) n.setAttribute('aria-hidden','true');
+  }
+  // one helper, because every control in the room answers to both a tap and a key
+  function tap(sel,fn){
+    var n=st.querySelector(sel); if(!n) return;
+    n.addEventListener('click',function(e){e.stopPropagation();fn();});
+    n.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();fn();}
+    });
+  }
+  scEl=st.querySelector('.st-scroll'); scM=scEl&&scEl.querySelector('i');
+  var svN=document.getElementById('story');
+  if(svN){ svN.addEventListener('scroll',scrollCue,{passive:true});
+           window.addEventListener('resize',scrollCue,{passive:true}); }
+
+  tap('[data-left]',       openStudy);
+  tap('[data-paper]',      openStory);
+  tap('[data-storyclose]', closeStory);
+  tap('[data-studyback]',  closeStudy);
+  tap('[data-studyevents]',function(){ closeStudy(); goEvents(); });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape') return;
+    if(st.classList.contains('instory')) closeStory();
+    else if(st.classList.contains('instudy')) closeStudy();
+  });
+
+  var dR=st.querySelector('[data-right]');
+  if(dR){
+    dR.addEventListener('click',function(e){e.stopPropagation();goEvents();});
+    dR.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();goEvents();}
+    });
+  }
+  var sk=st.querySelector('[data-skip]');
+  if(sk){
+    // Skip now does what the label says: straight to the RSVP form, in silence.
+    // The tap still primes audio so the journey works if they scroll back up.
+    var doSkip=function(){
+      primeAudio();                       // unlocks audio for later; plays nothing now
+      window.__bbHush=performance.now()+1600;   // stay silent while the jump settles
+      enter(); st.classList.add('opened');
+      var r=document.querySelector('.rsvp'); if(!r) return;
+      // the sections below still lazy-load, so the layout keeps growing for a
+      // moment after the jump. Re-assert the position until it stops moving.
+      var n=0, hold=setInterval(function(){
+        r.scrollIntoView({behavior:'auto'});
+        if(++n>16) clearInterval(hold);
+      },60);
+    };
+    sk.addEventListener('click',function(e){e.stopPropagation();doSkip();});
+    sk.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();doSkip();}
+    });
+  }
+}
+
+
+// --- MUSIC ----------------------------------------------------------------
+// One track per scene, each routed <audio> -> GainNode -> speakers, because
+// iOS Safari ignores el.volume outright: a volume-based fade is silent-fails
+// on an iPhone. Fading the gain works everywhere, and the ramps run on the
+// audio clock rather than a JS timer, so they do not stutter.
+//
+// Nothing autoplays. The AudioContext is created inside the knock (or the
+// skip), which is what unlocks audio in the browser. Files are fetched only
+// when their scene is near, so the landing stays exactly as light as it was.
+(function(){
+  var doc=document.getElementById('doc'); if(!doc) return;
+
+  var TRACKS=[
+    {sel:'.sec-hall',  src:'assets/landing/music-hall.mp3',    vol:0.95, wait:600},
+    {sel:'.scene.sg',  src:'assets/landing/music-sangeet.mp3', vol:0.95, wait:0},
+    {sel:'.hl-scene',  src:'assets/landing/music-haldi.mp3',   vol:0.78, wait:0},
+    {sel:'.wd-scene',  src:'assets/landing/music-wedding.mp3', vol:0.78, wait:0},
+    {sel:'.vd-scene',  sel2:'.vd-pata', src:'assets/landing/music-vidaayi.mp3', vol:0.85, wait:0}
+  ];
+  var FADE_IN=1.2, FADE_OUT=1.5, REST=5000, DWELL=400;
+
+  function ramp(t,to,dur){
+    if(!t.g||!window.__bbAC) { if(t.el) try{t.el.volume=to;}catch(e){} return; }
+    var c=window.__bbAC, now=c.currentTime, g=t.g.gain;
+    try{ g.cancelScheduledValues(now); g.setValueAtTime(g.value,now);
+         g.linearRampToValueAtTime(to,now+dur); }catch(e){}
+  }
+  function wire(t){
+    if(t.el) return;
+    t.el=new Audio(t.src); t.el.preload='auto'; t.el.load();
+    t.el.addEventListener('ended',function(){
+      t.resting=true; ramp(t,0,0.1);
+      setTimeout(function(){ t.resting=false; t.fading=false; apply(t); }, REST);
+    });
+    // start easing down before the last note so it ends softly instead of stopping
+    t.el.addEventListener('timeupdate',function(){
+      if(t.fading||!t.el.duration) return;
+      if(t.el.duration-t.el.currentTime<=FADE_OUT){ t.fading=true; ramp(t,0,FADE_OUT); }
+    });
+  }
+  function graph(t){
+    var c=window.__bbAC; if(!c||t.g||!t.el) return;
+    try{ t.src_=c.createMediaElementSource(t.el); t.g=c.createGain();
+         t.g.gain.value=0; t.src_.connect(t.g); t.g.connect(c.destination); }
+    catch(e){ t.g=null; }
+  }
+  function apply(t){
+    var want = (typeof sndOn==='undefined'||sndOn) && t.vis && !t.resting;
+    if(want){
+      wire(t); graph(t);
+      if(t.el.paused){ t.fading=false; var p=t.el.play(); if(p&&p.catch) p.catch(function(){}); }
+      ramp(t,t.vol,FADE_IN);
+    }else if(t.el){
+      ramp(t,0,FADE_OUT);
+      clearTimeout(t.stopT);
+      t.stopT=setTimeout(function(){ if(!t.vis&&t.el&&!t.el.paused) t.el.pause(); }, FADE_OUT*1000+80);
+    }
+  }
+  // Exactly one scene owns the sound at a time - whichever is most on screen.
+  // Visibility is measured from live geometry rather than from a cached
+  // IntersectionObserver ratio: a cached ratio goes stale if the page jumps
+  // without scrolling (the Skip button does exactly that), and three tracks
+  // started at once.
+  function seen(n){
+    var dr=doc.getBoundingClientRect(), r=n.getBoundingClientRect();
+    var v=Math.max(0, Math.min(r.bottom,dr.bottom)-Math.max(r.top,dr.top));
+    var h=Math.min(r.height||1, dr.height||1);
+    return h? v/h : 0;
+  }
+  function recompute(){
+    var best=null;
+    // __bbHush is the momentary silence after a jump; __bbQuiet is the study
+    // room, which stays quiet for as long as you are in it.
+    var hushed = (window.__bbHush && performance.now() < window.__bbHush)
+                 || window.__bbQuiet;
+    TRACKS.forEach(function(t){
+      if(!t.node) return;
+      t.ratio = hushed ? 0 : Math.max(seen(t.node), t.node2?seen(t.node2):0);
+      if(t.ratio>0.25) wire(t);                       // near enough: start fetching
+      if(t.ratio>0.40 && (!best||t.ratio>best.ratio)) best=t;
+    });
+    TRACKS.forEach(function(t){
+      var on=(t===best);
+      if(on===!!t.vis) return;
+      clearTimeout(t.dwellT);
+      if(on){
+        // a scene must settle before its track starts, so a fast scroll through
+        // four scenes does not stutter four clips
+        t.dwellT=setTimeout(function(){
+          t.vis=true; wire(t);
+          setTimeout(function(){ apply(t); }, t.wait||0);
+        }, DWELL);
+      }else{ t.vis=false; apply(t); }
+    });
+  }
+  var rafQ=false;
+  function queue(){ if(rafQ) return; rafQ=true;
+    requestAnimationFrame(function(){ rafQ=false; recompute(); }); }
+  function observe(){
+    TRACKS.forEach(function(t){
+      t.node=document.querySelector(t.sel);
+      if(t.sel2) t.node2=document.querySelector(t.sel2);
+    });
+    doc.addEventListener('scroll', queue, {passive:true});
+    window.addEventListener('resize', queue, {passive:true});
+    window.addEventListener('load', queue);
+    queue(); setTimeout(queue,400); setTimeout(queue,1500);
+  }
+  var st0=document.getElementById('stage');
+  if(st0 && st0.classList.contains('inside')) observe();
+  else {
+    var wait=setInterval(function(){
+      if(st0 && st0.classList.contains('inside')){ clearInterval(wait); observe(); }
+    },250);
+  }
+  window.__bbMusicMute=function(){ TRACKS.forEach(function(t){ if(t.el) apply(t); }); };
+  // the study asks for silence through the same recompute that owns every
+  // other decision about which track is playing, so the two cannot disagree
+  window.__bbQuietSet=function(q){ window.__bbQuiet=!!q; queue(); };
+  // a reporting hook - the elements are created in JS, so nothing in the DOM
+  // can be inspected without it. Used to verify the fades in a headless run.
+  window.__bbTracks=function(){ return TRACKS.map(function(t){
+    return {src:t.src.split('/').pop(), vis:!!t.vis, resting:!!t.resting,
+            playing:!!(t.el&&!t.el.paused), at:t.el?Math.round(t.el.currentTime*10)/10:null,
+            gain:t.g?Math.round(t.g.gain.value*100)/100:null}; }); };
+})();
+
+
+// --- THE THREAD -----------------------------------------------------------
+// Spans the journey, not the document: arrives just before the Sangeet,
+// finished by the itinerary card. Bead positions are measured from the real
+// scene offsets and re-measured on load and resize, because the scenes
+// lazy-load their artwork and the offsets move.
+(function(){
+  var doc=document.getElementById('doc'), th=document.querySelector('.thread');
+  if(!doc||!th) return;
+  var fil=th.querySelector('.tfil'),
+      beads=[].slice.call(th.querySelectorAll('.tbead')),
+      SEL=['.scene.sg','.hl-scene','.wd-scene','.vd-scene'],
+      A=0,B=1,pts=[0,0,0,0];
+  function measure(){
+    var sg=document.querySelector('.scene.sg'), keep=document.querySelector('.keep'),
+        first=document.querySelector('.doc > .pata');
+    if(!sg||!keep) return;
+    A=first? first.offsetTop : sg.offsetTop-doc.clientHeight*0.7;
+    B=keep.offsetTop-doc.clientHeight*0.45;
+    if(B-A<50) return;
+    pts=SEL.map(function(q){
+      var n=document.querySelector(q); if(!n) return 0;
+      var f=(n.offsetTop+n.offsetHeight*0.45-A)/(B-A);
+      return Math.max(0,Math.min(1,f));
+    });
+    beads.forEach(function(b,i){ b.style.top=(pts[i]*100).toFixed(2)+'%'; });
+  }
+  function tick(){
+    var p=(doc.scrollTop-A)/(B-A);
+    th.classList.toggle('show', p>=0 && p<1.02);
+    p=Math.max(0,Math.min(1,p));
+    fil.style.height=(p*100).toFixed(2)+'%';
+    beads.forEach(function(b,i){ b.classList.toggle('on', p>=pts[i]-0.015); });
+  }
+  measure(); tick();
+  // the thread announces itself the first time it appears
+  var seen=false;
+  var mark=function(){ if(!seen && th.classList.contains('show')){ seen=true; th.classList.add('firstshow'); } };
+  doc.addEventListener('scroll',function(){tick();mark();},{passive:true});
+  setTimeout(mark,500);
+  window.addEventListener('resize',function(){measure();tick();},{passive:true});
+  window.addEventListener('load',function(){measure();tick();});
+  setTimeout(function(){measure();tick();},1200);
+})();
+
+</script>
+</body></html>
