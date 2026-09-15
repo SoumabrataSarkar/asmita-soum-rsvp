@@ -1728,10 +1728,15 @@ else if(p.has('t')){
       a.muted=true; a.volume=0;
       var fin=function(){ try{ a.pause(); a.currentTime=0;
                                a.volume=v||1; a.muted=m; a.__ok=true; }catch(e){} };
-      var p=a.play(); if(p&&p.then) p.then(fin,fin); else fin();
+      setTimeout(fin,800);          // belt: a play() that never settles must
+      var p=a.play();               // not leave the element muted forever
+      if(p&&p.then) p.then(fin,fin); else fin();
     }catch(e){}
   }
   window.__bbUnlock1=unlock1;
+  window.__bbSfx=function(){ var o={}; for(var k in SFX){ var a=SFX[k];
+    o[k]={vol:a.volume, muted:a.muted, ok:!!a.__ok, src:/^blob:/.test(a.src)?'memory':'network'}; }
+    return o; };
   function unlockAll(){
     for(var k in SFX) unlock1(SFX[k]);
     if(window.__bbMusicUnlock) window.__bbMusicUnlock();
@@ -2143,6 +2148,7 @@ else if(p.has('t')){
   window.__bbTracks=function(){ return TRACKS.map(function(t){
     return {src:t.src.split('/').pop(), vis:!!t.vis, resting:!!t.resting,
             playing:!!(t.el&&!t.el.paused), at:t.el?Math.round(t.el.currentTime*10)/10:null,
+            vol:t.el?t.el.volume:null, muted:t.el?t.el.muted:null, ok:!!(t.el&&t.el.__ok),
             gain:t.g?Math.round(t.g.gain.value*100)/100:null}; }); };
 })();
 
